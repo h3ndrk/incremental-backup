@@ -5,26 +5,12 @@
 #include <sys/types.h> // lstat, struct stat
 #include <sys/stat.h> // lstat, struct stat
 #include <unistd.h> // lstat, struct stat
+#include <sqlite3.h>
 
+#include "walk.h"
 #include "processor.h"
-
-char *concatenate_paths(char *prefix, char *suffix)
-{
-	char *complete_path = NULL;
-	
-	if(!(complete_path = malloc((strlen(prefix) + 1 + strlen(suffix) + 1) * sizeof(char))))
-	{
-		fprintf(stderr, "Failed to concatenate paths.\n");
-		
-		return NULL;
-	}
-	
-	strcpy(complete_path, prefix);
-	strcat(complete_path, "/");
-	strcat(complete_path, suffix);
-	
-	return complete_path;
-}
+#include "path_helper.h"
+#include "database.h"
 
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path))
 {
@@ -64,6 +50,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 			continue;
 		}
 		
+		// process entry
 		if(S_ISDIR(stats.st_mode))
 		{
 			if(callback_process_directories != NULL)
@@ -89,13 +76,6 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 	}
 	
 	closedir(directory);
-	
-	return 0;
-}
-
-int main(int argc, char *argv[])
-{
-	walk("/home/hendrik/Programme/can", process_file, process_file);
 	
 	return 0;
 }

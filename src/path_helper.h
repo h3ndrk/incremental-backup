@@ -1,0 +1,1 @@
+char *concatenate_paths(char *prefix, char *suffix);
