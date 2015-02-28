@@ -52,12 +52,26 @@ int database_testfor_file(char *path, long long int timestamp)
 	{
 		perror("Failed to bind path to SQL statement");
 		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			perror("Failed to finalize SQL statement");
+			
+			return 1;
+		}
+		
 		return 1;
 	}
 	
 	if(sqlite3_bind_int64(statement, 2, timestamp) != SQLITE_OK)
 	{
 		perror("Failed to bind timestamp to SQL statement");
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			perror("Failed to finalize SQL statement");
+			
+			return 1;
+		}
 		
 		return 1;
 	}
@@ -66,11 +80,25 @@ int database_testfor_file(char *path, long long int timestamp)
 	
 	if(exec_code == SQLITE_DONE)
 	{
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			perror("Failed to finalize SQL statement");
+			
+			return 1;
+		}
+		
 		return 1;
 	}
 	else if(exec_code != SQLITE_ROW)
 	{
 		perror("Failed to execute SQL statement");
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			perror("Failed to finalize SQL statement");
+			
+			return 1;
+		}
 		
 		return 1;
 	}

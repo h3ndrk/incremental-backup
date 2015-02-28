@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	printf("Return code: %i\n", database_testfor_file("testfile2", 123456789));
+	printf("Return code: %i\n", database_testfor_file("testfile1", 123456789));
 	
 	database_close();
 	
