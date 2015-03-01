@@ -35,7 +35,7 @@ void database_close(void)
 	}
 }
 
-int database_testfor_file(char *path, long long int timestamp)
+int database_file_exists(char *path, long long int timestamp)
 {
 	int exec_code = 0;
 	char command[] = "SELECT * FROM files WHERE path = ? AND last_modified = ?";
