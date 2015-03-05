@@ -14,6 +14,7 @@ backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/ba
 
 tests: init
 	$(CC) src/test/test_array.c -Wall -Wextra -o bin/test_array
+	$(CC) src/test/test_if.c -Wall -Wextra -o bin/test_if
 
 init:
 	mkdir -p bin
