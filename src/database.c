@@ -41,12 +41,13 @@ int database_file_exists(char *path)
 	
 	sqlite3_stmt *statement = NULL;
 	int exec_code = 0;
+	int return_code = 0; // not found = 0, found = 1
 	
 	if(sqlite3_prepare(database, "SELECT * FROM files WHERE path = ?", -1, &statement, NULL) != SQLITE_OK)
 	{
 		fprintf(stderr, "Failed to prepare SQL statement: %s, line %i\n", __FILE__, __LINE__);
 		
-		return 1;
+		return 0;
 	}
 	
 	if(sqlite3_bind_text(statement, 1, path, -1, SQLITE_STATIC) != SQLITE_OK)
@@ -57,32 +58,42 @@ int database_file_exists(char *path)
 		{
 			fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
 			
-			return 1;
+			return 0;
 		}
 		
-		return 1;
+		return 0;
 	}
 	
-	printf("Modified rows: %i\n", sqlite3_changes(database));
 	exec_code = sqlite3_step(statement);
 	
-	if(exec_code != SQLITE_DONE && exec_code != SQLITE_ROW)
+	switch(exec_code)
 	{
-		fprintf(stderr, "Failed to execute SQL statement: %s, line %i\n", __FILE__, __LINE__);
-		
-		return 1;
+		case SQLITE_DONE:
+		{
+			return_code = 0;
+			break;
+		}
+		case SQLITE_ROW:
+		{
+			return_code = 1;
+			break;
+		}
+		default:
+		{
+			return_code = 0;
+			fprintf(stderr, "Failed to execute SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			break;
+		}
 	}
-	
-	printf("Modified rows: %i\n", sqlite3_changes(database));
 	
 	if(sqlite3_finalize(statement) != SQLITE_OK)
 	{
 		fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
 		
-		return 1;
+		return 0;
 	}
 	
-	return 0;
+	return return_code;
 }
 
 int database_files_flag(void)

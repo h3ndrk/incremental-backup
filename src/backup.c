@@ -29,7 +29,11 @@ int main(int argc, char *argv[])
 	
 	if(database_file_exists("t2"))
 	{
-		return 1;
+		printf("File exists!\n");
+	}
+	else
+	{
+		printf("File does not exist!\n");
 	}
 	
 	// if(database_file_unflag("t1"))
