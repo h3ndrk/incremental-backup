@@ -22,7 +22,30 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	printf("Return code: %i\n", database_testfor_file("testfile1", 123456789));
+	if(database_files_flag())
+	{
+		return 1;
+	}
+	
+	if(database_file_unflag("t1"))
+	{
+		return 1;
+	}
+	
+	if(database_file_unflag("t2"))
+	{
+		return 1;
+	}
+	
+	if(database_file_unflag("t3"))
+	{
+		return 1;
+	}
+	
+	if(database_files_delete_flagged())
+	{
+		return 1;
+	}
 	
 	database_close();
 	

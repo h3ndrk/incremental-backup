@@ -112,3 +112,79 @@ int database_file_exists(char *path, long long int timestamp)
 	
 	return 0;
 }
+
+int database_files_flag(void)
+{
+	printf("Flagging files...\n");
+	
+	if(sqlite3_exec(database, "UPDATE files SET flag = 1", NULL, NULL, NULL) != SQLITE_OK)
+	{
+		perror("Failed to execute SQL update");
+		
+		return 1;
+	}
+	
+	return 0;
+}
+
+int database_file_unflag(char *path)
+{
+	printf("Unflagging file: %s...\n", path);
+	
+	int exec_code = 0;
+	char command[] = "UPDATE files SET flag = 0 WHERE path = ?";
+	sqlite3_stmt *statement = NULL;
+	
+	if(sqlite3_prepare(database, command, -1, &statement, NULL) != SQLITE_OK)
+	{
+		perror("Failed to prepare SQL statement");
+		
+		return 1;
+	}
+	
+	if(sqlite3_bind_text(statement, 1, path, -1, SQLITE_STATIC) != SQLITE_OK)
+	{
+		perror("Failed to bind path to SQL statement");
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			perror("Failed to finalize SQL statement");
+			
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	exec_code = sqlite3_step(statement);
+	
+	if(exec_code != SQLITE_DONE)
+	{
+		perror("Failed to execute SQL statement");
+		
+		return 1;
+	}
+	
+	if(sqlite3_finalize(statement) != SQLITE_OK)
+	{
+		perror("Failed to finalize SQL statement");
+		
+		return 1;
+	}
+	
+	return 0;
+}
+
+int database_files_delete_flagged(void)
+{
+	printf("Delete flagged files...\n");
+	
+	if(sqlite3_exec(database, "DELETE FROM files WHERE flag = 1", NULL, NULL, NULL) != SQLITE_OK)
+	{
+		perror("Failed to execute SQL update");
+		
+		return 1;
+	}
+	
+	return 0;
+}

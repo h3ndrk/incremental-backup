@@ -29,17 +29,3 @@ char *concatenate_paths(char *prefix, char *suffix)
 	
 	return complete_path;
 }
-
-void remove_special_character(char *path)
-{
-	int i = 0;
-	while(*path)
-	{
-		if(*path == '`')
-		{
-			*path = '?';
-		}
-		
-		path++;
-	}
-}
