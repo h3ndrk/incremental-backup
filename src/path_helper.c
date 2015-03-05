@@ -18,7 +18,7 @@ char *concatenate_paths(char *prefix, char *suffix)
 	
 	if(!(complete_path = malloc((strlen(prefix) + 1 + strlen(suffix) + 1) * sizeof(char))))
 	{
-		fprintf(stderr, "Failed to concatenate paths.\n");
+		fprintf(stderr, "Failed to concatenate paths: %s, %i\n", __FILE__, __LINE__);
 		
 		return NULL;
 	}

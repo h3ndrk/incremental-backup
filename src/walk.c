@@ -22,7 +22,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 	// open directory
 	if(!(directory = opendir(path)))
 	{
-		fprintf(stderr, "Failed to open directory: %s\n", path);
+		fprintf(stderr, "Failed to open directory: %s, %s, %i\n", file_path, __FILE__, __LINE__);
 		return 1;
 	}
 	
@@ -44,7 +44,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		// get entry stats
 		if(lstat(file_path, &stats) < 0)
 		{
-			fprintf(stderr, "Failed to get stat: %s\n", file_path);
+			fprintf(stderr, "Failed to get stat: %s, %s, %i\n", file_path, __FILE__, __LINE__);
 			free(file_path);
 			
 			continue;
@@ -55,7 +55,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		{
 			if(callback_process_directories != NULL)
 			{
-				printf("Invoke sub directory walk: %s\n", file_path);
+				printf("Invoke sub directory walk: %s, %s, %i\n", file_path, __FILE__, __LINE__);
 				callback_process_directories(file_path);
 				walk(file_path, callback_process_files, callback_process_directories);
 			}

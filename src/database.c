@@ -19,7 +19,7 @@ int database_open(void)
 {
 	if(sqlite3_open("database.sqlite", &database))
 	{
-		perror("Failed to open SQL database");
+		fprintf(stderr, "Failed to open SQL database: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
@@ -35,26 +35,26 @@ void database_close(void)
 	}
 }
 
-int database_file_exists(char *path, long long int timestamp)
+int database_file_exists(char *path)
 {
-	int exec_code = 0;
-	char command[] = "SELECT * FROM files WHERE path = ? AND last_modified = ?";
+	printf("Checking file: %s...\n", path);
+	
 	sqlite3_stmt *statement = NULL;
 	
-	if(sqlite3_prepare(database, command, -1, &statement, NULL) != SQLITE_OK)
+	if(sqlite3_prepare(database, "SELECT * FROM files WHERE path = ?", -1, &statement, NULL) != SQLITE_OK)
 	{
-		perror("Failed to prepare SQL statement");
+		fprintf(stderr, "Failed to prepare SQL statement: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
 	
 	if(sqlite3_bind_text(statement, 1, path, -1, SQLITE_STATIC) != SQLITE_OK)
 	{
-		perror("Failed to bind path to SQL statement");
+		fprintf(stderr, "Failed to bind path to SQL statement: %s, %i\n", __FILE__, __LINE__);
 		
 		if(sqlite3_finalize(statement) != SQLITE_OK)
 		{
-			perror("Failed to finalize SQL statement");
+			fprintf(stderr, "Failed to finalize SQL statement: %s, %i\n", __FILE__, __LINE__);
 			
 			return 1;
 		}
@@ -62,50 +62,16 @@ int database_file_exists(char *path, long long int timestamp)
 		return 1;
 	}
 	
-	if(sqlite3_bind_int64(statement, 2, timestamp) != SQLITE_OK)
+	if(sqlite3_step(statement) != SQLITE_DONE)
 	{
-		perror("Failed to bind timestamp to SQL statement");
-		
-		if(sqlite3_finalize(statement) != SQLITE_OK)
-		{
-			perror("Failed to finalize SQL statement");
-			
-			return 1;
-		}
-		
-		return 1;
-	}
-	
-	exec_code = sqlite3_step(statement);
-	
-	if(exec_code == SQLITE_DONE)
-	{
-		if(sqlite3_finalize(statement) != SQLITE_OK)
-		{
-			perror("Failed to finalize SQL statement");
-			
-			return 1;
-		}
-		
-		return 1;
-	}
-	else if(exec_code != SQLITE_ROW)
-	{
-		perror("Failed to execute SQL statement");
-		
-		if(sqlite3_finalize(statement) != SQLITE_OK)
-		{
-			perror("Failed to finalize SQL statement");
-			
-			return 1;
-		}
+		fprintf(stderr, "Failed to execute SQL statement: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
 	
 	if(sqlite3_finalize(statement) != SQLITE_OK)
 	{
-		perror("Failed to finalize SQL statement");
+		fprintf(stderr, "Failed to finalize SQL statement: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
@@ -119,7 +85,7 @@ int database_files_flag(void)
 	
 	if(sqlite3_exec(database, "UPDATE files SET flag = 1", NULL, NULL, NULL) != SQLITE_OK)
 	{
-		perror("Failed to execute SQL update");
+		fprintf(stderr, "Failed to execute SQL update: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
@@ -131,24 +97,22 @@ int database_file_unflag(char *path)
 {
 	printf("Unflagging file: %s...\n", path);
 	
-	int exec_code = 0;
-	char command[] = "UPDATE files SET flag = 0 WHERE path = ?";
 	sqlite3_stmt *statement = NULL;
 	
-	if(sqlite3_prepare(database, command, -1, &statement, NULL) != SQLITE_OK)
+	if(sqlite3_prepare(database, "UPDATE files SET flag = 0 WHERE path = ?", -1, &statement, NULL) != SQLITE_OK)
 	{
-		perror("Failed to prepare SQL statement");
+		fprintf(stderr, "Failed to prepare SQL statement: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
 	
 	if(sqlite3_bind_text(statement, 1, path, -1, SQLITE_STATIC) != SQLITE_OK)
 	{
-		perror("Failed to bind path to SQL statement");
+		fprintf(stderr, "Failed to bind path to SQL statement: %s, %i\n", __FILE__, __LINE__);
 		
 		if(sqlite3_finalize(statement) != SQLITE_OK)
 		{
-			perror("Failed to finalize SQL statement");
+			fprintf(stderr, "Failed to finalize SQL statement: %s, %i\n", __FILE__, __LINE__);
 			
 			return 1;
 		}
@@ -156,18 +120,16 @@ int database_file_unflag(char *path)
 		return 1;
 	}
 	
-	exec_code = sqlite3_step(statement);
-	
-	if(exec_code != SQLITE_DONE)
+	if(sqlite3_step(statement) != SQLITE_DONE)
 	{
-		perror("Failed to execute SQL statement");
+		fprintf(stderr, "Failed to execute SQL statement: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
 	
 	if(sqlite3_finalize(statement) != SQLITE_OK)
 	{
-		perror("Failed to finalize SQL statement");
+		fprintf(stderr, "Failed to finalize SQL statement: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
@@ -181,7 +143,7 @@ int database_files_delete_flagged(void)
 	
 	if(sqlite3_exec(database, "DELETE FROM files WHERE flag = 1", NULL, NULL, NULL) != SQLITE_OK)
 	{
-		perror("Failed to execute SQL update");
+		fprintf(stderr, "Failed to execute SQL update: %s, %i\n", __FILE__, __LINE__);
 		
 		return 1;
 	}
