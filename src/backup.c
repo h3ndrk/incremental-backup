@@ -17,12 +17,12 @@ int main(int argc, char *argv[])
 	// walk("/home/hendrik/Programme/can", process_file_create_first, process_file);
 	// close_diff();
 	
-	if(database_open())
+	if(database_open() < 0)
 	{
 		return 1;
 	}
 	
-	if(database_files_flag())
+	if(database_files_flag() < 0)
 	{
 		return 1;
 	}
@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
 	{
 		printf("File does not exist!\n");
 	}
+	
+	printf("Return code: %i\n", database_file_update("Testfile43", 65000));
 	
 	// if(database_file_unflag("t1"))
 	// {

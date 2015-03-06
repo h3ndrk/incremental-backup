@@ -21,7 +21,7 @@ int database_open(void)
 	{
 		fprintf(stderr, "Failed to open SQL database: %s, line %i\n", __FILE__, __LINE__);
 		
-		return 1;
+		return -1;
 	}
 	
 	return 0;
@@ -104,7 +104,7 @@ int database_files_flag(void)
 	{
 		fprintf(stderr, "Failed to execute SQL update: %s, line %i\n", __FILE__, __LINE__);
 		
-		return 1;
+		return -1;
 	}
 	
 	return 0;
@@ -120,7 +120,7 @@ int database_file_unflag(char *path)
 	{
 		fprintf(stderr, "Failed to prepare SQL statement: %s, line %i\n", __FILE__, __LINE__);
 		
-		return 1;
+		return -1;
 	}
 	
 	if(sqlite3_bind_text(statement, 1, path, -1, SQLITE_STATIC) != SQLITE_OK)
@@ -131,24 +131,24 @@ int database_file_unflag(char *path)
 		{
 			fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
 			
-			return 1;
+			return -1;
 		}
 		
-		return 1;
+		return -1;
 	}
 	
 	if(sqlite3_step(statement) != SQLITE_DONE)
 	{
 		fprintf(stderr, "Failed to execute SQL statement: %s, line %i\n", __FILE__, __LINE__);
 		
-		return 1;
+		return -1;
 	}
 	
 	if(sqlite3_finalize(statement) != SQLITE_OK)
 	{
 		fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
 		
-		return 1;
+		return -1;
 	}
 	
 	return 0;
@@ -162,8 +162,181 @@ int database_files_delete_flagged(void)
 	{
 		fprintf(stderr, "Failed to execute SQL update: %s, line %i\n", __FILE__, __LINE__);
 		
-		return 1;
+		return -1;
 	}
 	
 	return 0;
+}
+
+int database_file_insert(char *path, long long int timestamp)
+{
+	printf("Insert file: %s...\n", path);
+	
+	sqlite3_stmt *statement = NULL;
+	int exec_code = 0;
+	int return_code = 0;
+	
+	if(sqlite3_prepare(database, "INSERT INTO files VALUES (?, ?, 0)", -1, &statement, NULL) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to prepare SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		return -1;
+	}
+	
+	if(sqlite3_bind_text(statement, 1, path, -1, SQLITE_STATIC) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to bind path to SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			
+			return -1;
+		}
+		
+		return -1;
+	}
+	
+	if(sqlite3_bind_int64(statement, 2, timestamp) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to bind timestamp to SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			
+			return -1;
+		}
+		
+		return -1;
+	}
+	
+	exec_code = sqlite3_step(statement);
+	
+	switch(exec_code)
+	{
+		case SQLITE_DONE: case SQLITE_ROW:
+		{
+			return_code = 0;
+			break;
+		}
+		default:
+		{
+			return_code = -1;
+			fprintf(stderr, "Failed to execute SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			break;
+		}
+	}
+	
+	if(sqlite3_finalize(statement) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		return -1;
+	}
+	
+	return return_code;
+}
+
+int database_file_update(char *path, long long int timestamp)
+{
+	printf("Update file: %s...\n", path);
+	
+	sqlite3_stmt *statement = NULL;
+	int exec_code = 0;
+	int return_code = 0;
+	
+	if(sqlite3_prepare(database, "UPDATE files SET path = ?, last_modified = ? WHERE path = ? AND last_modified < ?", -1, &statement, NULL) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to prepare SQL statement: %s, line %i, %s\n", __FILE__, __LINE__, sqlite3_errmsg(database));
+		
+		return -1;
+	}
+	
+	if(sqlite3_bind_text(statement, 1, path, -1, SQLITE_STATIC) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to bind path to SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			
+			return -1;
+		}
+		
+		return -1;
+	}
+	
+	if(sqlite3_bind_int64(statement, 2, timestamp) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to bind timestamp to SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			
+			return -1;
+		}
+		
+		return -1;
+	}
+	
+	if(sqlite3_bind_text(statement, 3, path, -1, SQLITE_STATIC) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to bind second path to SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			
+			return -1;
+		}
+		
+		return -1;
+	}
+	
+	if(sqlite3_bind_int64(statement, 4, timestamp) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to bind second timestamp to SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		if(sqlite3_finalize(statement) != SQLITE_OK)
+		{
+			fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			
+			return -1;
+		}
+		
+		return -1;
+	}
+	
+	exec_code = sqlite3_step(statement);
+	
+	switch(exec_code)
+	{
+		case SQLITE_DONE: case SQLITE_ROW:
+		{
+			return_code = 0;
+			break;
+		}
+		default:
+		{
+			return_code = -1;
+			fprintf(stderr, "Failed to execute SQL statement: %s, line %i\n", __FILE__, __LINE__);
+			break;
+		}
+	}
+	
+	if(sqlite3_changes(database))
+	{
+		return_code = 1;
+	}
+	
+	if(sqlite3_finalize(statement) != SQLITE_OK)
+	{
+		fprintf(stderr, "Failed to finalize SQL statement: %s, line %i\n", __FILE__, __LINE__);
+		
+		return -1;
+	}
+	
+	return return_code;
 }
