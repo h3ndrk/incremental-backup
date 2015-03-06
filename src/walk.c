@@ -27,7 +27,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 	// open directory
 	if(!(directory = opendir(path)))
 	{
-		fprintf(stderr, "Failed to open directory: %s, %s, line %i\n", file_path, __FILE__, __LINE__);
+		fprintf(stderr, "Failed to open directory: %s, %s, line %i\n", path, __FILE__, __LINE__);
 		return 1;
 	}
 	
@@ -69,7 +69,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 			
 			continue;
 		}
-		else
+		if(S_ISREG(stats.st_mode))
 		{
 			if(callback_process_files != NULL)
 			{

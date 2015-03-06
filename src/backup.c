@@ -26,42 +26,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	walk("/home/hendrik/Programme/can", process_file_final, process_file);
-	// if(database_files_flag() < 0)
-	// {
-	// 	return 1;
-	// }
-	
-	// if(database_file_exists("t2"))
-	// {
-	// 	printf("File exists!\n");
-	// }
-	// else
-	// {
-	// 	printf("File does not exist!\n");
-	// }
-	
-	// printf("Return code: %i\n", database_file_update("Testfile43", 65000));
-	
-	// if(database_file_unflag("t1"))
-	// {
-	// 	return 1;
-	// }
-	
-	// if(database_file_unflag("t2"))
-	// {
-	// 	return 1;
-	// }
-	
-	// if(database_file_unflag("t3"))
-	// {
-	// 	return 1;
-	// }
-	
-	// if(database_files_delete_flagged())
-	// {
-	// 	return 1;
-	// }
+	walk("/", process_file, process_file);
 	
 	database_close();
 	archive_close();
