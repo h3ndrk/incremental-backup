@@ -9,8 +9,8 @@ LIBS = `pkg-config --libs sqlite3`
 
 all: backup
 
-backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o
-	$(CC) bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o $(CFLAGS) -o bin/backup $(LIBS)
+backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o bin/obj/logic.o
+	$(CC) bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o bin/obj/logic.o $(CFLAGS) -o bin/backup $(LIBS)
 
 tests: init
 	$(CC) src/test/test_array.c -Wall -Wextra -o bin/test_array
@@ -34,6 +34,9 @@ bin/obj/path_helper.o: src/path_helper.c
 
 bin/obj/database.o: src/database.c
 	$(CC) $(CFLAGS) -c -o bin/obj/database.o src/database.c $(LIBS)
+
+bin/obj/logic.o: src/logic.c
+	$(CC) $(CFLAGS) -c -o bin/obj/logic.o src/logic.c $(LIBS)
 
 clean:
 	rm -Rf bin

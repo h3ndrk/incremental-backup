@@ -12,6 +12,7 @@
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
+#include "logic.h"
 
 static sqlite3 *database = NULL;
 
@@ -37,7 +38,7 @@ void database_close(void)
 
 int database_file_exists(char *path)
 {
-	printf("Checking file: %s...\n", path);
+	// printf("Checking file: %s...\n", path);
 	
 	sqlite3_stmt *statement = NULL;
 	int exec_code = 0;
@@ -98,7 +99,7 @@ int database_file_exists(char *path)
 
 int database_files_flag(void)
 {
-	printf("Flagging files...\n");
+	// printf("Flagging files...\n");
 	
 	if(sqlite3_exec(database, "UPDATE files SET flag = 1", NULL, NULL, NULL) != SQLITE_OK)
 	{
@@ -112,7 +113,7 @@ int database_files_flag(void)
 
 int database_file_unflag(char *path)
 {
-	printf("Unflagging file: %s...\n", path);
+	// printf("Unflagging file: %s...\n", path);
 	
 	sqlite3_stmt *statement = NULL;
 	
@@ -156,7 +157,7 @@ int database_file_unflag(char *path)
 
 int database_files_delete_flagged(void)
 {
-	printf("Delete flagged files...\n");
+	// printf("Delete flagged files...\n");
 	
 	if(sqlite3_exec(database, "DELETE FROM files WHERE flag = 1", NULL, NULL, NULL) != SQLITE_OK)
 	{
@@ -170,7 +171,7 @@ int database_files_delete_flagged(void)
 
 int database_file_insert(char *path, long long int timestamp)
 {
-	printf("Insert file: %s...\n", path);
+	// printf("Insert file: %s...\n", path);
 	
 	sqlite3_stmt *statement = NULL;
 	int exec_code = 0;
@@ -240,7 +241,7 @@ int database_file_insert(char *path, long long int timestamp)
 
 int database_file_update(char *path, long long int timestamp)
 {
-	printf("Update file: %s...\n", path);
+	// printf("Update file: %s...\n", path);
 	
 	sqlite3_stmt *statement = NULL;
 	int exec_code = 0;

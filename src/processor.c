@@ -12,6 +12,7 @@
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
+#include "logic.h"
 
 static FILE *diff_file_descriptor = NULL;
 static char diff_file_failed = 0; // 1 = diff file fopen failed, no more opening
@@ -58,4 +59,18 @@ void close_diff(void)
 	{
 		fclose(diff_file_descriptor);
 	}
+}
+
+void process_file_final(char *path)
+{
+	struct stat stats;
+	
+	if(lstat(path, &stats) < 0)
+	{
+		fprintf(stderr, "Failed to get stat: %s, %s, line %i\n", path, __FILE__, __LINE__);
+		
+		return;
+	}
+	
+	logic_process_file(path, stats.st_mtim.tv_sec);
 }

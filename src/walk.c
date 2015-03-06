@@ -11,6 +11,7 @@
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
+#include "logic.h"
 
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path))
 {

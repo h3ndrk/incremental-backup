@@ -11,6 +11,7 @@
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
+#include "logic.h"
 
 char *concatenate_paths(char *prefix, char *suffix)
 {
