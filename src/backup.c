@@ -8,6 +8,7 @@
 #include <sqlite3.h>
 #include <archive.h>
 #include <archive_entry.h>
+#include <fcntl.h>
 
 #include "walk.h"
 #include "processor.h"
@@ -18,7 +19,7 @@
 
 int main(int argc, char *argv[])
 {
-	archive_initialize("test.tar");
+	archive_open("test.tar");
 	
 	if(database_open() < 0)
 	{
@@ -63,6 +64,7 @@ int main(int argc, char *argv[])
 	// }
 	
 	database_close();
+	archive_close();
 	
 	return 0;
 }

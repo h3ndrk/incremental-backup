@@ -9,6 +9,7 @@
 #include <sqlite3.h>
 #include <archive.h>
 #include <archive_entry.h>
+#include <fcntl.h>
 
 #include "walk.h"
 #include "processor.h"

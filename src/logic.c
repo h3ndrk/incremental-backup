@@ -8,6 +8,7 @@
 #include <sqlite3.h>
 #include <archive.h>
 #include <archive_entry.h>
+#include <fcntl.h>
 
 #include "walk.h"
 #include "processor.h"
@@ -30,6 +31,7 @@ int logic_process_file(char *path, long long int timestamp)
 			case 1: // file in index is older
 			{
 				printf("%s store (update)\n", path);
+				archive_add_file(path);
 				break;
 			}
 			case 0: // file in index is up to date
@@ -55,6 +57,7 @@ int logic_process_file(char *path, long long int timestamp)
 		}
 		
 		printf("%s store (insert)\n", path);
+		archive_add_file(path);
 	}
 	
 	return 0;
