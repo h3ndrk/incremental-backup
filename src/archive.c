@@ -16,20 +16,13 @@
 #include "logic.h"
 #include "archive.h"
 
-char *concatenate_paths(char *prefix, char *suffix)
+static struct archive *archive = NULL;
+
+int archive_initialize(char *path)
 {
-	char *complete_path = NULL;
+	printf("Creating archive: %s\n", path);
 	
-	if(!(complete_path = malloc((strlen(prefix) + 1 + strlen(suffix) + 1) * sizeof(char))))
-	{
-		fprintf(stderr, "Failed to concatenate paths: %s, %i\n", __FILE__, __LINE__);
-		
-		return NULL;
-	}
 	
-	strcpy(complete_path, prefix);
-	strcat(complete_path, "/");
-	strcat(complete_path, suffix);
 	
-	return complete_path;
+	return 0;
 }

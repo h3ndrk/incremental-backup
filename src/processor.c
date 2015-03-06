@@ -7,12 +7,15 @@
 #include <unistd.h> // lstat, struct stat
 #include <time.h> // ctime
 #include <sqlite3.h>
+#include <archive.h>
+#include <archive_entry.h>
 
 #include "walk.h"
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
 #include "logic.h"
+#include "archive.h"
 
 static FILE *diff_file_descriptor = NULL;
 static char diff_file_failed = 0; // 1 = diff file fopen failed, no more opening

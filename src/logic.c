@@ -6,18 +6,18 @@
 #include <sys/stat.h> // lstat, struct stat
 #include <unistd.h> // lstat, struct stat
 #include <sqlite3.h>
-#include <errno.h>
+#include <archive.h>
+#include <archive_entry.h>
 
 #include "walk.h"
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
 #include "logic.h"
+#include "archive.h"
 
 int logic_process_file(char *path, long long int timestamp)
 {
-	printf("%lli %s", timestamp, path);
-	
 	if(database_file_unflag(path) < 0)
 	{
 		return -1;
@@ -29,17 +29,17 @@ int logic_process_file(char *path, long long int timestamp)
 		{
 			case 1: // file in index is older
 			{
-				printf(" store (update)\n");
+				printf("%s store (update)\n", path);
 				break;
 			}
 			case 0: // file in index is up to date
 			{
-				printf(" is up to date\n");
+				// printf(" is up to date\n");
 				break;
 			}
 			case -1:
 			{
-				printf(" error\n");
+				// printf(" error\n");
 				
 				return -1;
 				break;
@@ -50,11 +50,11 @@ int logic_process_file(char *path, long long int timestamp)
 	{
 		if(database_file_insert(path, timestamp) < 0)
 		{
-			printf(" error\n");
+			// printf(" error\n");
 			return -1;
 		}
 		
-		printf(" store (insert)\n");
+		printf("%s store (insert)\n", path);
 	}
 	
 	return 0;

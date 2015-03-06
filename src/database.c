@@ -6,13 +6,15 @@
 #include <sys/stat.h> // lstat, struct stat
 #include <unistd.h> // lstat, struct stat
 #include <sqlite3.h>
-#include <errno.h>
+#include <archive.h>
+#include <archive_entry.h>
 
 #include "walk.h"
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
 #include "logic.h"
+#include "archive.h"
 
 static sqlite3 *database = NULL;
 

@@ -6,15 +6,19 @@
 #include <sys/stat.h> // lstat, struct stat
 #include <unistd.h> // lstat, struct stat
 #include <sqlite3.h>
+#include <archive.h>
+#include <archive_entry.h>
 
 #include "walk.h"
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
 #include "logic.h"
+#include "archive.h"
 
 int main(int argc, char *argv[])
 {
+	archive_initialize("test.tar");
 	
 	if(database_open() < 0)
 	{

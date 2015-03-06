@@ -6,12 +6,15 @@
 #include <sys/stat.h> // lstat, struct stat
 #include <unistd.h> // lstat, struct stat
 #include <sqlite3.h>
+#include <archive.h>
+#include <archive_entry.h>
 
 #include "walk.h"
 #include "processor.h"
 #include "path_helper.h"
 #include "database.h"
 #include "logic.h"
+#include "archive.h"
 
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path))
 {
@@ -56,7 +59,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		{
 			if(callback_process_directories != NULL)
 			{
-				printf("Invoke sub directory walk: %s, %s, line %i\n", file_path, __FILE__, __LINE__);
+				// printf("Invoke sub directory walk: %s, %s, line %i\n", file_path, __FILE__, __LINE__);
 				callback_process_directories(file_path);
 				walk(file_path, callback_process_files, callback_process_directories);
 			}
