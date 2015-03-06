@@ -4,8 +4,10 @@ CFLAGS = -Wall
 CFLAGS += -Wextra
 #CFLAGS += -pedantic
 CFLAGS += `pkg-config --cflags sqlite3`
+CFLAGS += `pkg-config --cflags libarchive`
 
 LIBS = `pkg-config --libs sqlite3`
+LIBS += `pkg-config --libs libarchive`
 
 all: backup
 
@@ -15,6 +17,7 @@ backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/ba
 tests: init
 	$(CC) src/test/test_array.c -Wall -Wextra -o bin/test_array
 	$(CC) src/test/test_if.c -Wall -Wextra -o bin/test_if
+	$(CC) src/test/test_libarchive.c -Wall -Wextra `pkg-config --cflags libarchive` -o bin/test_libarchive `pkg-config --libs libarchive`
 
 init:
 	mkdir -p bin
