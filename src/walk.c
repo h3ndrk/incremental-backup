@@ -16,6 +16,7 @@
 #include "database.h"
 #include "logic.h"
 #include "archive.h"
+#include "index.h"
 
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path))
 {

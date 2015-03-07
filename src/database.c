@@ -16,6 +16,7 @@
 #include "database.h"
 #include "logic.h"
 #include "archive.h"
+#include "index.h"
 
 static sqlite3 *database = NULL;
 

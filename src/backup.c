@@ -16,20 +16,29 @@
 #include "database.h"
 #include "logic.h"
 #include "archive.h"
+#include "index.h"
 
 int main(int argc, char *argv[])
 {
-	archive_open("test.tar");
+	index_add(10, "test", 0);
+	index_add(20, "test1", 1);
+	index_add(30, "test2", 1);
 	
-	if(database_open() < 0)
-	{
-		return 1;
-	}
+	index_print();
 	
-	walk("/", process_file, process_file);
+	index_cleanup();
 	
-	database_close();
-	archive_close();
+	// archive_open("test.tar");
+	
+	// if(database_open() < 0)
+	// {
+	// 	return 1;
+	// }
+	
+	// walk("/", process_file, process_file);
+	
+	// database_close();
+	// archive_close();
 	
 	return 0;
 }

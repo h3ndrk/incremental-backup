@@ -16,6 +16,7 @@
 #include "database.h"
 #include "logic.h"
 #include "archive.h"
+#include "index.h"
 
 int logic_process_file(char *path, long long int timestamp)
 {
