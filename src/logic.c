@@ -9,6 +9,7 @@
 #include <archive.h>
 #include <archive_entry.h>
 #include <fcntl.h>
+#include <fnmatch.h>
 
 #include "walk.h"
 #include "processor.h"

@@ -9,6 +9,7 @@
 #include <archive.h>
 #include <archive_entry.h>
 #include <fcntl.h>
+#include <fnmatch.h>
 
 #include "walk.h"
 #include "processor.h"
@@ -53,6 +54,14 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		{
 			continue;
 		}
+		
+		// exclude files
+		// if(fnmatch("/home/*", file_path, 0))
+		// {
+		// 	free(file_path);
+			
+		// 	continue;
+		// }
 		
 		// get entry stats
 		if(lstat(file_path, &stats) < 0)

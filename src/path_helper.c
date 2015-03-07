@@ -9,6 +9,7 @@
 #include <archive.h>
 #include <archive_entry.h>
 #include <fcntl.h>
+#include <fnmatch.h>
 
 #include "walk.h"
 #include "processor.h"
@@ -43,4 +44,26 @@ char *concatenate_paths(char *prefix, char *suffix)
 	free(prefix_copy);
 	
 	return complete_path;
+}
+
+int compare_paths(char *path0, long long int path0_length, char *path1, long long int path1_length)
+{
+	long long int offset = 0;
+	
+	if(path0_length != path1_length)
+	{
+		return 0;
+	}
+	
+	offset = path0_length;
+	
+	while(offset--)
+	{
+		if(*(path0 + offset) != *(path1 + offset))
+		{
+			return 0;
+		}
+	}
+	
+	return 1;
 }

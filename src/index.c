@@ -9,6 +9,7 @@
 #include <archive.h>
 #include <archive_entry.h>
 #include <fcntl.h>
+#include <fnmatch.h>
 
 #include "walk.h"
 #include "processor.h"
@@ -24,8 +25,8 @@ static long long int index_files_amount = 0;
 static index_file *index_saved = NULL;
 static long long int index_saved_amount = 0;
 
-static int index_files_get_by_path(char *path);
-static int index_saved_get_by_path(char *path);
+static long long int index_files_get_by_path(char *path, long long int path_length);
+static long long int index_saved_get_by_path(char *path, long long int path_length);
 
 int index_files_add(long long int timestamp, char *path, char flag)
 {
@@ -53,6 +54,7 @@ int index_files_add(long long int timestamp, char *path, char flag)
 	
 	index_files[index_files_amount - 1].timestamp = timestamp;
 	index_files[index_files_amount - 1].path = strdup(path);
+	index_files[index_files_amount - 1].path_length = strlen(path);
 	index_files[index_files_amount - 1].flag = flag;
 	
 	if(!(index_files_amount % 100000))
@@ -75,13 +77,13 @@ void index_files_cleanup(void)
 	free(index_files);
 }
 
-static int index_files_get_by_path(char *path)
+static long long int index_files_get_by_path(char *path, long long int path_length)
 {
 	long long int i = 0;
 	
 	for(i = 0; i < index_files_amount; i++)
 	{
-		if(!strcmp(index_files[i].path, path))
+		if(compare_paths(index_files[i].path, index_files[i].path_length, path, path_length))
 		{
 			return i;
 		}
@@ -90,12 +92,31 @@ static int index_files_get_by_path(char *path)
 	return -1;
 }
 
-long long int index_files_get_timestamp_by_path(char *path)
+long long int index_files_get_timestamp_by_path(char *path, long long int path_length)
 {
 	long long int index = 0;
 	
-	index = index_files_get_by_path(path);
+	index = index_files_get_by_path(path, path_length);
 	
+	if(index < 0)
+	{
+		fprintf(stderr, "Failed to find file: (%s, line %i)\n", __FILE__, __LINE__);
+		
+		return -1;
+	}
+	
+	if(index >= index_files_amount)
+	{
+		fprintf(stderr, "Failed to find file, index is out of bounds: (%s, line %i)\n", __FILE__, __LINE__);
+		
+		return -1;
+	}
+	
+	return index_files[index].timestamp;
+}
+
+long long int index_files_get_timestamp_by_index(long long int index)
+{
 	if(index < 0)
 	{
 		fprintf(stderr, "Failed to find file: (%s, line %i)\n", __FILE__, __LINE__);
@@ -187,6 +208,7 @@ int index_saved_add(long long int timestamp, char *path, char flag)
 	
 	index_saved[index_saved_amount - 1].timestamp = timestamp;
 	index_saved[index_saved_amount - 1].path = strdup(path);
+	index_saved[index_saved_amount - 1].path_length = strlen(path);
 	index_saved[index_saved_amount - 1].flag = flag;
 	
 	if(!(index_saved_amount % 100000))
@@ -209,13 +231,13 @@ void index_saved_cleanup(void)
 	free(index_saved);
 }
 
-static int index_saved_get_by_path(char *path)
+static long long int index_saved_get_by_path(char *path, long long int path_length)
 {
 	long long int i = 0;
 	
 	for(i = 0; i < index_saved_amount; i++)
 	{
-		if(!strcmp(index_saved[i].path, path))
+		if(compare_paths(index_saved[i].path, index_saved[i].path_length, path, path_length))
 		{
 			return i;
 		}
@@ -224,16 +246,31 @@ static int index_saved_get_by_path(char *path)
 	return -1;
 }
 
-long long int index_saved_get_timestamp_by_path(char *path)
+long long int index_saved_get_timestamp_by_path(char *path, long long int path_length)
 {
 	long long int index = 0;
 	
-	index = index_saved_get_by_path(path);
+	index = index_saved_get_by_path(path, path_length);
 	
 	if(index < 0)
 	{
-		fprintf(stderr, "Failed to find file: (%s, line %i)\n", __FILE__, __LINE__);
+		return -1;
+	}
+	
+	if(index >= index_saved_amount)
+	{
+		fprintf(stderr, "Failed to find file, index is out of bounds: (%s, line %i)\n", __FILE__, __LINE__);
 		
+		return -1;
+	}
+	
+	return index_saved[index].timestamp;
+}
+
+long long int index_saved_get_timestamp_by_index(long long int index)
+{
+	if(index < 0)
+	{
 		return -1;
 	}
 	
@@ -250,4 +287,68 @@ long long int index_saved_get_timestamp_by_path(char *path)
 long long int index_saved_get_amount(void)
 {
 	return index_saved_amount;
+}
+
+void index_compare_files_with_index(void)
+{
+	long long int i = 0;
+	long long int timestamp = 0;
+	long long int index = 0;
+	
+	printf("Comparing files...\n");
+	
+	for(i = 0; i < index_files_amount; i++)
+	{
+		index = index_saved_get_by_path(index_files[i].path, index_files[i].path_length);
+		timestamp = index_saved_get_timestamp_by_index(index);
+		
+		// flag found files
+		if(index >= 0)
+		{
+			index_saved[index].flag = 1;
+		}
+		
+		// add or update files in index
+		if(timestamp < 0)
+		{
+			printf("%s\n", index_files[i].path);
+			index_saved_add(index_files[i].timestamp, index_files[i].path, 1);
+			
+			continue;
+		}
+		if(timestamp < index_files[i].timestamp)
+		{
+			printf("%s\n", index_files[i].path);
+			index_saved[index].timestamp = index_files[i].timestamp;
+			
+			continue;
+		}
+	}
+}
+
+int index_write_saved(char *path)
+{
+	long long int i = 0;
+	FILE *saved_file_descriptor = NULL;
+	
+	printf("Writing index to %s\n", path);
+	
+	if((saved_file_descriptor = fopen(path, "w")) == NULL)
+	{
+		fprintf(stderr, "Failed to open diff file: (%s, line %i)\n", __FILE__, __LINE__);
+		
+		return -1;
+	}
+	
+	for(i = 0; i < index_saved_amount; i++)
+	{
+		if(index_saved[i].flag == 1)
+		{
+			fprintf(saved_file_descriptor, "%lli %s\n", index_saved[i].timestamp, index_saved[i].path);
+		}
+	}
+	
+	fclose(saved_file_descriptor);
+	
+	return 0;
 }
