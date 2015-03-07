@@ -10,6 +10,7 @@
 #include <archive_entry.h>
 #include <fcntl.h>
 #include <fnmatch.h>
+#include <argp.h>
 
 #include "walk.h"
 #include "processor.h"
@@ -18,9 +19,14 @@
 #include "logic.h"
 #include "archive.h"
 #include "index.h"
+#include "arguments.h"
 
 int main(int argc, char *argv[])
 {
+	arguments_parse(argc, argv);
+	
+	exit(0);
+	
 	path_skip_hidden_files(1);
 	
 	path_exclude_pattern_add("/tmp/*");

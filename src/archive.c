@@ -10,6 +10,7 @@
 #include <archive_entry.h>
 #include <fcntl.h>
 #include <fnmatch.h>
+#include <argp.h>
 
 #include "walk.h"
 #include "processor.h"
@@ -18,6 +19,7 @@
 #include "logic.h"
 #include "archive.h"
 #include "index.h"
+#include "arguments.h"
 
 static struct archive *archive = NULL;
 

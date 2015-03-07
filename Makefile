@@ -13,8 +13,8 @@ LIBS += `pkg-config --libs libarchive`
 
 all: backup
 
-backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o bin/obj/logic.o bin/obj/archive.o bin/obj/index.o
-	$(CC) bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o bin/obj/logic.o bin/obj/archive.o bin/obj/index.o $(CFLAGS) -o bin/backup $(LIBS)
+backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o bin/obj/logic.o bin/obj/archive.o bin/obj/index.o bin/obj/arguments.o
+	$(CC) bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o bin/obj/logic.o bin/obj/archive.o bin/obj/index.o bin/obj/arguments.o $(CFLAGS) -o bin/backup $(LIBS)
 
 tests: init
 	$(CC) src/test/test_array.c -Wall -Wextra -o bin/test_array
@@ -48,6 +48,9 @@ bin/obj/archive.o: src/archive.c
 
 bin/obj/index.o: src/index.c
 	$(CC) $(CFLAGS) -c -o bin/obj/index.o src/index.c $(LIBS)
+
+bin/obj/arguments.o: src/arguments.c
+	$(CC) $(CFLAGS) -c -o bin/obj/arguments.o src/arguments.c $(LIBS)
 
 clean:
 	rm -Rf bin
