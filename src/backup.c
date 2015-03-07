@@ -18,26 +18,33 @@
 #include "archive.h"
 #include "index.h"
 
+void a(long long int timestamp, char *path)
+{
+	printf("%lli %s\n", timestamp, path);
+}
+
 int main(int argc, char *argv[])
 {
-	walk("/", process_file_index, NULL);
+	// walk("/", process_file_index, NULL);
 	
-	if(walk_get_error())
-	{
-		fprintf(stderr, "An error occurred while walking through the directory.\n");
-	}
+	// if(walk_get_error())
+	// {
+	// 	fprintf(stderr, "An error occurred while walking through the directory.\n");
+	// }
 	
-	// index_print();
+	// // index_print();
 	
-	printf("%lli\n", index_get_amount());
+	// printf("%lli\n", index_get_amount());
 	
-	sleep(10);
+	// sleep(10);
 	
-	printf("Starting...\n");
-	printf("Timestamp: %lli\n", index_get_timestamp_by_path("/home/hendrik/Programme/incremental-backup/Makefile"));
-	printf("Ended\n");
+	// printf("Starting...\n");
+	// printf("Timestamp: %lli\n", index_get_timestamp_by_path("/home/hendrik/Programme/incremental-backup/Makefile"));
+	// printf("Ended\n");
 	
-	index_cleanup();
+	// index_cleanup();
+	
+	index_process_file("/home/hendrik/diff.txt", a);
 	
 	// archive_open("test.tar");
 	

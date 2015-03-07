@@ -123,3 +123,46 @@ long long int index_get_amount(void)
 {
 	return index_files_amount;
 }
+
+int index_process_file(char *path, void (*callback_index_process_file)(long long int timestamp, char *path))
+{
+	FILE *index_file = NULL;
+	char *line = NULL;
+	char *line_backup = NULL;
+	size_t len = 0;
+	ssize_t read = 0;
+	long long int read_timestamp = 0;
+	long int space_position = 0;
+	
+	if(callback_index_process_file == NULL)
+	{
+		return 0;
+	}
+	
+	if((index_file = fopen(path, "r")) == NULL)
+	{
+		fprintf(stderr, "Failed to open index file: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
+		
+		return -1;
+	}
+	
+	while((read = getline(&line, &len, index_file)) != -1)
+	{
+		space_position = strchr(line, ' ') - line;
+		line[space_position] = '\0';
+		line_backup = line + space_position + 1;
+		line_backup[strlen(line_backup) - 1] = '\0';
+		read_timestamp = strtoll(line, NULL, 10);
+		
+		callback_index_process_file(read_timestamp, line_backup);
+	}
+	
+	if(line)
+	{
+		free(line);
+	}
+	
+	fclose(index_file);
+	
+	return 0;
+}
