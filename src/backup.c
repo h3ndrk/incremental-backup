@@ -21,9 +21,21 @@
 
 int main(int argc, char *argv[])
 {
+	path_exclude_pattern_add("/tmp/*");
+	path_exclude_pattern_add("/proc/*");
+	path_exclude_pattern_add("/sys/*");
+	path_exclude_pattern_add("/mnt/*");
+	path_exclude_pattern_add("/dev/*");
+	path_exclude_pattern_add("/var/*");
+	path_exclude_pattern_add("/usr/*");
+	path_exclude_pattern_add("/etc/*");
+	path_exclude_pattern_add("/home/*");
+	path_exclude_pattern_add("/boot/*");
+	path_exclude_pattern_add("/run/*");
+	
 	printf("Storing files...\n");
 	
-	walk("/home/hendrik", process_file_index, NULL);
+	walk("/", process_file_index, NULL);
 	
 	if(walk_get_error())
 	{
@@ -40,6 +52,7 @@ int main(int argc, char *argv[])
 	
 	index_files_cleanup();
 	index_saved_cleanup();
+	path_exclude_pattern_cleanup();
 	
 	// archive_open("test.tar");
 	

@@ -56,12 +56,14 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		}
 		
 		// exclude files
-		// if(fnmatch("/home/*", file_path, 0))
-		// {
-		// 	free(file_path);
+		if(path_exclude_pattern_match(file_path))
+		{
+			printf("Skipping %s\n", file_path);
 			
-		// 	continue;
-		// }
+			free(file_path);
+			
+			continue;
+		}
 		
 		// get entry stats
 		if(lstat(file_path, &stats) < 0)
@@ -120,3 +122,4 @@ long long int walk_get_error_read_stat(void)
 {
 	return error_read_stat;
 }
+

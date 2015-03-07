@@ -19,6 +19,9 @@
 #include "archive.h"
 #include "index.h"
 
+static char **path_exclude_patterns = NULL;
+static long long int path_exclude_patterns_amount = 0;
+
 char *concatenate_paths(char *prefix, char *suffix)
 {
 	char *complete_path = NULL;
@@ -66,4 +69,60 @@ int compare_paths(char *path0, long long int path0_length, char *path1, long lon
 	}
 	
 	return 1;
+}
+
+int path_exclude_pattern_add(char *pattern)
+{
+	char **backup_path_exclude_patterns = path_exclude_patterns;
+	
+	if(path_exclude_patterns == NULL)
+	{
+		if((path_exclude_patterns = malloc((++path_exclude_patterns_amount) * sizeof(char *))) == NULL)
+		{
+			fprintf(stderr, "Failed to allocate exclude patterns: (%s, line %i)\n", __FILE__, __LINE__);
+			
+			return -1;
+		}
+	}
+	else
+	{
+		if((path_exclude_patterns = realloc(path_exclude_patterns, (++path_exclude_patterns_amount) * sizeof(char *))) == NULL)
+		{
+			path_exclude_patterns = backup_path_exclude_patterns; // restore old index
+			fprintf(stderr, "Failed to reallocate exclude patterns: (%s, line %i)\n", __FILE__, __LINE__);
+			
+			return -1;
+		}
+	}
+	
+	path_exclude_patterns[path_exclude_patterns_amount - 1] = strdup(pattern);
+	
+	return 0;
+}
+
+void path_exclude_pattern_cleanup(void)
+{
+	long long int i = 0;
+	
+	for(i = 0; i < path_exclude_patterns_amount; i++)
+	{
+		free(path_exclude_patterns[i]);
+	}
+	
+	free(path_exclude_patterns);
+}
+
+int path_exclude_pattern_match(char *path)
+{
+	long long int i = 0;
+	
+	for(i = 0; i < path_exclude_patterns_amount; i++)
+	{
+		if(!fnmatch(path_exclude_patterns[i], path, 0))
+		{
+			return 1;
+		}
+	}
+	
+	return 0;
 }
