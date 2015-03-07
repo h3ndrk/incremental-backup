@@ -21,6 +21,7 @@
 
 static char **path_exclude_patterns = NULL;
 static long long int path_exclude_patterns_amount = 0;
+static char path_skip_hidden_files_state = 0; // 1 = hidden files will be skipped
 
 char *concatenate_paths(char *prefix, char *suffix)
 {
@@ -125,4 +126,14 @@ int path_exclude_pattern_match(char *path)
 	}
 	
 	return 0;
+}
+
+void path_skip_hidden_files(char state) // 0 = disable, 1 = enable
+{
+	path_skip_hidden_files_state = state;
+}
+
+int path_get_skip_hidden_files(void)
+{
+	return path_skip_hidden_files_state;
 }

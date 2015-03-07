@@ -49,6 +49,12 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 			continue;
 		}
 		
+		// skip hidden files (begins with point)
+		if(path_get_skip_hidden_files() && *(file->d_name) == '.')
+		{
+			continue;
+		}
+		
 		// concatenate paths to get the absolute path
 		if(!(file_path = concatenate_paths(path, file->d_name)))
 		{
