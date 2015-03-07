@@ -18,6 +18,8 @@
 #include "archive.h"
 #include "index.h"
 
+static char error = 0;
+
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path))
 {
 	struct dirent *file = NULL;
@@ -28,7 +30,9 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 	// open directory
 	if(!(directory = opendir(path)))
 	{
-		fprintf(stderr, "Failed to open directory: %s, %s, line %i\n", path, __FILE__, __LINE__);
+		error = 1;
+		
+		fprintf(stderr, "Failed to open directory: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
 		return 1;
 	}
 	
@@ -50,21 +54,24 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		// get entry stats
 		if(lstat(file_path, &stats) < 0)
 		{
-			fprintf(stderr, "Failed to get stat: %s, %s, line %i\n", file_path, __FILE__, __LINE__);
+			error = 1;
+			
+			fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", file_path, __FILE__, __LINE__);
 			free(file_path);
 			
 			continue;
 		}
 		
-		// process entry
+		// process file entry
 		if(S_ISDIR(stats.st_mode))
 		{
 			if(callback_process_directories != NULL)
 			{
-				// printf("Invoke sub directory walk: %s, %s, line %i\n", file_path, __FILE__, __LINE__);
+				// printf("Invoke sub directory walk: %s, (%s, line %i)\n", file_path, __FILE__, __LINE__);
 				callback_process_directories(file_path);
-				walk(file_path, callback_process_files, callback_process_directories);
 			}
+			
+			walk(file_path, callback_process_files, callback_process_directories);
 			
 			free(file_path);
 			
@@ -84,4 +91,9 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 	closedir(directory);
 	
 	return 0;
+}
+
+int walk_get_error(void)
+{
+	return error;
 }

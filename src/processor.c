@@ -72,10 +72,24 @@ void process_file_final(char *path)
 	
 	if(lstat(path, &stats) < 0)
 	{
-		fprintf(stderr, "Failed to get stat: %s, %s, line %i\n", path, __FILE__, __LINE__);
+		fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
 		
 		return;
 	}
 	
 	logic_process_file(path, stats.st_mtim.tv_sec);
+}
+
+void process_file_index(char *path)
+{
+	struct stat stats;
+	
+	if(lstat(path, &stats) < 0)
+	{
+		fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
+		
+		return;
+	}
+	
+	index_add(stats.st_mtim.tv_sec, path, 0);
 }

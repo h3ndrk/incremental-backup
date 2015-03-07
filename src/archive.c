@@ -45,7 +45,7 @@ int archive_add_file(char *path)
 	
 	if(return_code != ARCHIVE_OK)
 	{
-		fprintf(stderr, "Failed to create read disk: %s, line %i, %s\n", __FILE__, __LINE__, archive_error_string(file));
+		fprintf(stderr, "Failed to create read disk: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
 		
 		return -1;
 	}
@@ -62,7 +62,7 @@ int archive_add_file(char *path)
 		}
 		if(return_code != ARCHIVE_OK)
 		{
-			fprintf(stderr, "Failed to read file header: %s, line %i, %s\n", __FILE__, __LINE__, archive_error_string(file));
+			fprintf(stderr, "Failed to read file header: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
 			
 			archive_entry_free(entry);
 			break;
@@ -73,14 +73,14 @@ int archive_add_file(char *path)
 		
 		if(return_code < ARCHIVE_OK)
 		{
-			fprintf(stderr, "Failed to write archive header: %s, line %i, %s\n", __FILE__, __LINE__, archive_error_string(file));
+			fprintf(stderr, "Failed to write archive header: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
 			
 			archive_entry_free(entry);
 			break;
 		}
 		if(return_code == ARCHIVE_FATAL)
 		{
-			fprintf(stderr, "Fatal error: %s, line %i, %s\n", __FILE__, __LINE__, archive_error_string(file));
+			fprintf(stderr, "Fatal error: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
 			
 			archive_entry_free(entry);
 			break;
@@ -105,14 +105,14 @@ int archive_add_file(char *path)
 			// 	}
 			// 	if(return_code != ARCHIVE_OK)
 			// 	{
-			// 		fprintf(stderr, "Failed to read data block: %s, line %i, %s\n", __FILE__, __LINE__, archive_error_string(file));
+			// 		fprintf(stderr, "Failed to read data block: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
 					
 			// 		break;
 			// 	}
 			// 	return_code = archive_write_data_block(archive, buff, size, offset);
 			// 	if(return_code != ARCHIVE_OK)
 			// 	{
-			// 		fprintf(stderr, "Failed to write data block: %s, line %i, %s\n", __FILE__, __LINE__, archive_error_string(archive));
+			// 		fprintf(stderr, "Failed to write data block: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(archive));
 					
 			// 		break;
 			// 	}

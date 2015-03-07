@@ -20,11 +20,22 @@
 
 int main(int argc, char *argv[])
 {
-	index_add(10, "test", 0);
-	index_add(20, "test1", 1);
-	index_add(30, "test2", 1);
+	walk("/", process_file_index, NULL);
 	
-	index_print();
+	if(walk_get_error())
+	{
+		fprintf(stderr, "An error occurred while walking through the directory.\n");
+	}
+	
+	// index_print();
+	
+	printf("%lli\n", index_get_amount());
+	
+	sleep(10);
+	
+	printf("Starting...\n");
+	printf("Timestamp: %lli\n", index_get_timestamp_by_path("/home/hendrik/Programme/incremental-backup/Makefile"));
+	printf("Ended\n");
 	
 	index_cleanup();
 	
