@@ -19,6 +19,8 @@
 #include "index.h"
 
 static char error = 0;
+static long long int error_open_dir = 0;
+static long long int error_read_stat = 0;
 
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path))
 {
@@ -31,6 +33,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 	if(!(directory = opendir(path)))
 	{
 		error = 1;
+		error_open_dir++;
 		
 		fprintf(stderr, "Failed to open directory: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
 		return 1;
@@ -55,6 +58,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		if(lstat(file_path, &stats) < 0)
 		{
 			error = 1;
+			error_read_stat++;
 			
 			fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", file_path, __FILE__, __LINE__);
 			free(file_path);
@@ -96,4 +100,14 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 int walk_get_error(void)
 {
 	return error;
+}
+
+long long int walk_get_error_open_dir(void)
+{
+	return error_open_dir;
+}
+
+long long int walk_get_error_read_stat(void)
+{
+	return error_read_stat;
 }

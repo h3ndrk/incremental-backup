@@ -25,14 +25,18 @@ void a(long long int timestamp, char *path)
 
 int main(int argc, char *argv[])
 {
-	// walk("/", process_file_index, NULL);
+	walk("/", process_file_index, NULL);
 	
-	// if(walk_get_error())
-	// {
-	// 	fprintf(stderr, "An error occurred while walking through the directory.\n");
-	// }
+	if(walk_get_error())
+	{
+		fprintf(stderr, "Error while walking through the directory:\n    %lli open directory errors\n    %lli read file stat errors\n", walk_get_error_open_dir(), walk_get_error_read_stat());
+	}
 	
-	// // index_print();
+	index_process_file("/home/hendrik/diff.txt", process_file_index_saved);
+	
+	printf("%lli files in the filesystem, %lli files in index\n", index_files_get_amount(), index_saved_get_amount());
+	
+	// index_print();
 	
 	// printf("%lli\n", index_get_amount());
 	
@@ -42,9 +46,8 @@ int main(int argc, char *argv[])
 	// printf("Timestamp: %lli\n", index_get_timestamp_by_path("/home/hendrik/Programme/incremental-backup/Makefile"));
 	// printf("Ended\n");
 	
-	// index_cleanup();
-	
-	index_process_file("/home/hendrik/diff.txt", a);
+	index_files_cleanup();
+	index_saved_cleanup();
 	
 	// archive_open("test.tar");
 	

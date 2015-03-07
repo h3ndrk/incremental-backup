@@ -91,5 +91,10 @@ void process_file_index(char *path)
 		return;
 	}
 	
-	index_add(stats.st_mtim.tv_sec, path, 0);
+	index_files_add(stats.st_mtim.tv_sec, path, 0);
+}
+
+void process_file_index_saved(long long int timestamp, char *path)
+{
+	index_saved_add(timestamp, path, 0);
 }
