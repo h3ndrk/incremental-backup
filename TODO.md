@@ -9,6 +9,6 @@
 - [x] faster string compare
 - [x] merge loops together
 - [x] ignore of paths (paths which start with ...)
-- [ ] skip hidden files argument
+- [x] skip hidden files argument
 - [ ] generate and use absolute paths for everything
-- [ ] skip when ignored file should be walked/stored
+- [x] skip when ignored file should be walked/stored
