@@ -59,17 +59,17 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		}
 		case 's':
 		{
-			arguments->source = strdup(arg);
+			arguments->source = realpath(arg, NULL);
 			break;
 		}
 		case 'a':
 		{
-			arguments->archive = strdup(arg);
+			arguments->archive = realpath(arg, NULL);
 			break;
 		}
 		case 'i':
 		{
-			arguments->index = strdup(arg);
+			arguments->index = realpath(arg, NULL);
 			break;
 		}
 		case 'f':

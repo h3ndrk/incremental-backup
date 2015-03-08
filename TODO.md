@@ -10,9 +10,9 @@
 - [x] merge loops together
 - [x] ignore of paths (paths which start with ...)
 - [x] skip hidden files argument
-- [ ] generate and use absolute paths for everything
+- [x] generate and use absolute paths for everything
 - [x] skip when ignored file should be walked/stored
 - [x] make full backup per argument
 - [ ] commenting all functions and all code
 - [ ] per directory settings (hidden files, exclude)
-- [ ] archive and index should be optional
+- [ ] archive and index arguments should be optional
