@@ -13,8 +13,8 @@ LIBS += `pkg-config --libs libarchive`
 
 all: backup
 
-backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o bin/obj/logic.o bin/obj/archive.o bin/obj/index.o bin/obj/arguments.o
-	$(CC) bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/database.o bin/obj/logic.o bin/obj/archive.o bin/obj/index.o bin/obj/arguments.o $(CFLAGS) -o bin/backup $(LIBS)
+backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/archive.o bin/obj/index.o bin/obj/arguments.o
+	$(CC) bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/archive.o bin/obj/index.o bin/obj/arguments.o $(CFLAGS) -o bin/backup $(LIBS)
 
 tests: init
 	$(CC) src/test/test_array.c -Wall -Wextra -o bin/test_array
@@ -36,12 +36,6 @@ bin/obj/processor.o: src/processor.c
 
 bin/obj/path_helper.o: src/path_helper.c
 	$(CC) $(CFLAGS) -c -o bin/obj/path_helper.o src/path_helper.c $(LIBS)
-
-bin/obj/database.o: src/database.c
-	$(CC) $(CFLAGS) -c -o bin/obj/database.o src/database.c $(LIBS)
-
-bin/obj/logic.o: src/logic.c
-	$(CC) $(CFLAGS) -c -o bin/obj/logic.o src/logic.c $(LIBS)
 
 bin/obj/archive.o: src/archive.c
 	$(CC) $(CFLAGS) -c -o bin/obj/archive.o src/archive.c $(LIBS)

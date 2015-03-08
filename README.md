@@ -5,7 +5,6 @@ Simple incremental backup implementation in C.
 ## Used libraries
 
 * POSIX for recursive directory walking
-* SQLite for storing file informations
 * libarchive for storing the files
 
 ## Database structure

@@ -5,7 +5,6 @@
 #include <sys/types.h> // lstat, struct stat
 #include <sys/stat.h> // lstat, struct stat
 #include <unistd.h> // lstat, struct stat
-#include <sqlite3.h>
 #include <archive.h>
 #include <archive_entry.h>
 #include <fcntl.h>
@@ -15,8 +14,6 @@
 #include "walk.h"
 #include "processor.h"
 #include "path_helper.h"
-#include "database.h"
-#include "logic.h"
 #include "archive.h"
 #include "index.h"
 #include "arguments.h"
@@ -92,8 +89,6 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 void arguments_parse(int argc, char **argv)
 {
 	struct argp argp = { options, arguments_parse_opt, 0, doc, 0, 0, 0 };
-	
-	// printf("Parsing %i arguments...\n", argc);
 	
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 }

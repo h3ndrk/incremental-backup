@@ -5,7 +5,6 @@
 #include <sys/types.h> // lstat, struct stat
 #include <sys/stat.h> // lstat, struct stat
 #include <unistd.h> // lstat, struct stat
-#include <sqlite3.h>
 #include <archive.h>
 #include <archive_entry.h>
 #include <fcntl.h>
@@ -15,8 +14,6 @@
 #include "walk.h"
 #include "processor.h"
 #include "path_helper.h"
-#include "database.h"
-#include "logic.h"
 #include "archive.h"
 #include "index.h"
 #include "arguments.h"

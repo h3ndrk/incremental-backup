@@ -5,7 +5,6 @@
 #include <sys/types.h> // lstat, struct stat
 #include <sys/stat.h> // lstat, struct stat
 #include <unistd.h> // lstat, struct stat
-#include <sqlite3.h>
 #include <archive.h>
 #include <archive_entry.h>
 #include <fcntl.h>
@@ -15,8 +14,6 @@
 #include "walk.h"
 #include "processor.h"
 #include "path_helper.h"
-#include "database.h"
-#include "logic.h"
 #include "archive.h"
 #include "index.h"
 #include "arguments.h"
@@ -98,28 +95,6 @@ int archive_add_file(char *path)
 				len = read(input_file_descriptor, buff, ARCHIVE_BUFF_SIZE);
 			}
 			close(input_file_descriptor);
-			
-			// while(1)
-			// {
-			// 	return_code = archive_read_data_block(file, &buff, &size, &offset);
-			// 	if(return_code == ARCHIVE_EOF)
-			// 	{
-			// 		break;
-			// 	}
-			// 	if(return_code != ARCHIVE_OK)
-			// 	{
-			// 		fprintf(stderr, "Failed to read data block: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
-					
-			// 		break;
-			// 	}
-			// 	return_code = archive_write_data_block(archive, buff, size, offset);
-			// 	if(return_code != ARCHIVE_OK)
-			// 	{
-			// 		fprintf(stderr, "Failed to write data block: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(archive));
-					
-			// 		break;
-			// 	}
-			// }
 		}
 		
 		archive_entry_free(entry);
