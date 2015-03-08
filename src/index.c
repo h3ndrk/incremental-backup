@@ -314,6 +314,7 @@ void index_compare_files_with_index(void)
 		if(timestamp < 0)
 		{
 			printf("%s\n", index_files[i].path);
+			archive_add_file(index_files[i].path);
 			index_saved_add(index_files[i].timestamp, index_files[i].path, 1);
 			
 			continue;
@@ -321,6 +322,7 @@ void index_compare_files_with_index(void)
 		if(timestamp < index_files[i].timestamp)
 		{
 			printf("%s\n", index_files[i].path);
+			archive_add_file(index_files[i].path);
 			index_saved[index].timestamp = index_files[i].timestamp;
 			
 			continue;

@@ -3,6 +3,7 @@ struct arguments
 	int number;
 	char *source;
 	char *archive;
+	char *index;
 };
 extern struct arguments arguments;
 

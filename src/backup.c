@@ -25,35 +25,32 @@ int main(int argc, char *argv[])
 {
 	arguments_parse(argc, argv);
 	
-	printf("PATH: %s\n", arguments.source);
+	printf("Indexing files...\n");
 	
-	path_exclude_pattern_cleanup();
-	arguments_cleanup();
-	
-	exit(0);
-	
-	printf("Storing files...\n");
-	
-	walk("/", process_file_index, NULL);
+	walk(arguments.source, process_file_index, NULL);
 	
 	if(walk_get_error())
 	{
 		fprintf(stderr, "Error while walking through the directory:\n    %lli open directory errors\n    %lli read file stat errors\n", walk_get_error_open_dir(), walk_get_error_read_stat());
 	}
 	
-	// index_process_file("diff.txt", process_file_index_saved);
+	index_process_file(arguments.index, process_file_index_saved);
 	
 	printf("%lli files in the filesystem, %lli files in index\n", index_files_get_amount(), index_saved_get_amount());
 	
+	archive_open(arguments.archive);
+	
 	index_compare_files_with_index();
 	
-	index_write_saved("diff_out.txt");
+	archive_close();
+	
+	index_write_saved(arguments.index);
 	
 	index_files_cleanup();
 	index_saved_cleanup();
 	path_exclude_pattern_cleanup();
+	arguments_cleanup();
 	
-	// archive_open("test.tar");
 	
 	// if(database_open() < 0)
 	// {
@@ -63,7 +60,6 @@ int main(int argc, char *argv[])
 	// walk("/", process_file, process_file);
 	
 	// database_close();
-	// archive_close();
 	
 	return 0;
 }
