@@ -26,9 +26,10 @@ static const char *doc = "Simple incremental backup implementation in C.";
 static struct argp_option options[] =
 {
 	{ NULL, 0, NULL, 0, "I/O options", 1 },
-	{ "source", 's', "PATH", 0, "Path to the directory which should be stored in backup (required)", 0 },
-	{ "archive", 'a', "FILE", 0, "Path to the generated archive (required)", 0 },
-	{ "index", 'i', "FILE", 0, "Path to the index file (required)", 0 },
+	{ "source", 's', "PATH", 0, "Path to the directory which should be stored in backup (REQUIRED)", 0 },
+	{ "archive", 'a', "FILE", 0, "Path to the generated archive (REQUIRED)", 0 },
+	{ "index", 'i', "FILE", 0, "Path to the index file (REQUIRED)", 0 },
+	{ "compress", 'c', "ALGORITHM", 0, "Possible ALGORITHM values: 'b64encode', 'bzip2', 'compress', 'grzip', 'gzip', 'lrzip', 'lzip', 'lzop', 'uuencode', 'xz'", 0 },
 	{ NULL, 0, NULL, 0, "Recursivly directory walking options", 2 },
 	{ "exclude", 'e', "PATTERN", 0, "Exclude files and directories which match the shell wildcard pattern PATTERN", 0 },
 	{ "skip-hidden", 'S', NULL, 0, "Skip hidden files (leading '.' in file name)", 0 },
@@ -37,7 +38,7 @@ static struct argp_option options[] =
 	{ "yes", 'y', NULL, 0, "Answer all questions with yes (script-friendly)", 0 },
 	{ NULL, 0, NULL, 0, NULL, 0 }
 };
-struct arguments arguments = { 0, 0, NULL, NULL, NULL };
+struct arguments arguments = { 0, 0, NULL, NULL, NULL, ARGUMENTS_ALG_NONE };
 
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 {
@@ -79,6 +80,61 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		case 'y':
 		{
 			arguments->yes = 1;
+			break;
+		}
+		case 'c':
+		{
+			if(!strcmp(arg, "b64encode"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_B64ENCODE;
+				break;
+			}
+			if(!strcmp(arg, "bzip2"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_BZIP2;
+				break;
+			}
+			if(!strcmp(arg, "compress"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_COMPRESS;
+				break;
+			}
+			if(!strcmp(arg, "grzip"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_GRZIP;
+				break;
+			}
+			if(!strcmp(arg, "gzip"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_GZIP;
+				break;
+			}
+			if(!strcmp(arg, "lrzip"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_LRZIP;
+				break;
+			}
+			if(!strcmp(arg, "lzip"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_LZIP;
+				break;
+			}
+			if(!strcmp(arg, "lzop"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_LZOP;
+				break;
+			}
+			if(!strcmp(arg, "uuencode"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_UUENCODE;
+				break;
+			}
+			if(!strcmp(arg, "xz"))
+			{
+				arguments->compression_algorithm = ARGUMENTS_ALG_XZ;
+				break;
+			}
+			
 			break;
 		}
 		case ARGP_KEY_END:

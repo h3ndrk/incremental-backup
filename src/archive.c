@@ -23,7 +23,61 @@ static struct archive *archive = NULL;
 int archive_open(char *path)
 {
 	archive = archive_write_new();
-	archive_write_add_filter_gzip(archive);
+	
+	switch(arguments.compression_algorithm)
+	{
+		case ARGUMENTS_ALG_B64ENCODE:
+		{
+			archive_write_add_filter_b64encode(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_BZIP2:
+		{
+			archive_write_add_filter_bzip2(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_COMPRESS:
+		{
+			archive_write_add_filter_compress(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_GRZIP:
+		{
+			archive_write_add_filter_grzip(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_GZIP:
+		{
+			archive_write_add_filter_gzip(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_LRZIP:
+		{
+			archive_write_add_filter_lrzip(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_LZIP:
+		{
+			archive_write_add_filter_lzip(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_LZOP:
+		{
+			archive_write_add_filter_lzop(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_UUENCODE:
+		{
+			archive_write_add_filter_uuencode(archive);
+			break;
+		}
+		case ARGUMENTS_ALG_XZ:
+		{
+			archive_write_add_filter_xz(archive);
+			break;
+		}
+	}
+	
 	archive_write_set_format_ustar(archive);
 	archive_write_open_filename(archive, path);
 	
