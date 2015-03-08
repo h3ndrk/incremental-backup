@@ -3,11 +3,9 @@ CC = gcc
 CFLAGS = -Wall
 CFLAGS += -Wextra
 #CFLAGS += -pedantic
-CFLAGS += `pkg-config --cflags sqlite3`
 CFLAGS += `pkg-config --cflags libarchive`
 
-LIBS = `pkg-config --libs sqlite3`
-LIBS += `pkg-config --libs libarchive`
+LIBS  = `pkg-config --libs libarchive`
 
 .PHONY: all backup tests init clean
 

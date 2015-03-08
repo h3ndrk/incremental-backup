@@ -25,16 +25,19 @@ const char *argp_program_bug_address = "https://github.com/NIPE-SYSTEMS/incremen
 static const char *doc = "Simple incremental backup implementation in C.";
 static struct argp_option options[] =
 {
-	{ NULL, 0, NULL, 0, "I/O options (Required)", 1 },
-	{ "source", 's', "PATH", 0, "Path to the directory which should be stored in backup", 0 },
-	{ "archive", 'a', "FILE", 0, "Path to the generated archive", 0 },
-	{ "index", 'i', "FILE", 0, "Path to the index file", 0 },
-	{ NULL, 0, NULL, 0, "Recursivly directory walking options", 0 },
+	{ NULL, 0, NULL, 0, "I/O options", 1 },
+	{ "source", 's', "PATH", 0, "Path to the directory which should be stored in backup (required)", 0 },
+	{ "archive", 'a', "FILE", 0, "Path to the generated archive (required)", 0 },
+	{ "index", 'i', "FILE", 0, "Path to the index file (required)", 0 },
+	{ NULL, 0, NULL, 0, "Recursivly directory walking options", 2 },
 	{ "exclude", 'e', "PATTERN", 0, "Exclude files and directories which match the shell wildcard pattern PATTERN", 0 },
 	{ "skip-hidden", 'S', NULL, 0, "Skip hidden files (leading '.' in file name)", 0 },
+	{ NULL, 0, NULL, 0, "General options", 3 },
+	{ "full", 'f', NULL, 0, "Ignore index file and make a full backup", 0 },
+	{ "yes", 'y', NULL, 0, "Answer all questions with yes (script-friendly)", 0 },
 	{ NULL, 0, NULL, 0, NULL, 0 }
 };
-struct arguments arguments = { 0, NULL, NULL, NULL };
+struct arguments arguments = { 0, 0, NULL, NULL, NULL };
 
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 {
@@ -66,6 +69,16 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		case 'i':
 		{
 			arguments->index = strdup(arg);
+			break;
+		}
+		case 'f':
+		{
+			arguments->full = 1;
+			break;
+		}
+		case 'y':
+		{
+			arguments->yes = 1;
 			break;
 		}
 		case ARGP_KEY_END:

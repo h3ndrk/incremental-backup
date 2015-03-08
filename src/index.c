@@ -153,6 +153,8 @@ int index_process_file(char *path, void (*callback_index_process_file)(long long
 		return 0;
 	}
 	
+	printf("Reading files from index...\n");
+	
 	if((index_file = fopen(path, "r")) == NULL)
 	{
 		fprintf(stderr, "Failed to open index file: %s, (%s, line %i)\n", path, __FILE__, __LINE__);

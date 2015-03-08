@@ -12,3 +12,6 @@
 - [x] skip hidden files argument
 - [ ] generate and use absolute paths for everything
 - [x] skip when ignored file should be walked/stored
+- [ ] make full backup per argument
+- [ ] commenting all functions and all code
+- [ ] per directory settings (hidden files, exclude)

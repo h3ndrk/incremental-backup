@@ -20,9 +20,11 @@
 
 int main(int argc, char *argv[])
 {
+	char user_input = 0;
+	
 	arguments_parse(argc, argv);
 	
-	printf("Indexing files...\n");
+	printf("Reading files from filesystem...\n");
 	
 	walk(arguments.source, process_file_index, NULL);
 	
@@ -31,17 +33,45 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Error while walking through the directory:\n    %lli open directory errors\n    %lli read file stat errors\n", walk_get_error_open_dir(), walk_get_error_read_stat());
 	}
 	
-	index_process_file(arguments.index, process_file_index_saved);
+	if(!arguments.full)
+	{
+		if(index_process_file(arguments.index, process_file_index_saved) < 0)
+		{
+			printf("Starting full backup.\n");
+		}
+	}
+	else
+	{
+		printf("Starting full backup.\n");
+	}
 	
 	printf("%lli files in the filesystem, %lli files in index\n", index_files_get_amount(), index_saved_get_amount());
 	
-	archive_open(arguments.archive);
+	printf("Continue with backup? [Y/n] ");
+	if(arguments.yes)
+	{
+		printf("Y\n");
+		user_input = '\n';
+	}
+	else
+	{
+		user_input = getchar();
+	}
 	
-	index_compare_files_with_index();
-	
-	archive_close();
-	
-	index_write_saved(arguments.index);
+	if(user_input == '\n' || user_input == 'y' || user_input == 'Y')
+	{
+		archive_open(arguments.archive);
+		
+		index_compare_files_with_index();
+		
+		archive_close();
+		
+		index_write_saved(arguments.index);
+	}
+	else
+	{
+		printf("Interrupted by user.\n");
+	}
 	
 	index_files_cleanup();
 	index_saved_cleanup();

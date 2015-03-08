@@ -1,6 +1,7 @@
 struct arguments
 {
-	int number;
+	char full;
+	char yes;
 	char *source;
 	char *archive;
 	char *index;
