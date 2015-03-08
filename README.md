@@ -8,21 +8,21 @@ Simple incremental backup implementation in C.
 * user questions which are skippable per command line option
 * several compression algorithms supported:
     * b64encode
-    * bzip2
-    * compress
+    * **bzip2**
+    * **compress**
     * grzip
-    * gzip
+    * **gzip**
     * lrzip
     * lzip
     * lzop
     * uuencode
-    * xz
+    * **xz**
 * automatic use of absolute paths
 * Stable with tested features
 * incremental backup
 * backup archive as (compressed) tar file
-* exclude patterns
-* skip hidden files
+* exclude patterns per command line option
+* skip hidden files per command line option
 
 ## Used libraries
 
