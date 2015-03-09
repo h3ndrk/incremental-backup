@@ -59,3 +59,10 @@ For a full list of options try:
 ### Memory usage test
 
 Memory usage with 856002 files stored from filesystem and 856002 files stored from index: 123.25 MB
+
+## License
+
+lastest GPL-license
+
+NIPE-SYSTEMS
+[http://www.nipe-systems.de](http://www.nipe-systems.de)
