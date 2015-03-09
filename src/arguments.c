@@ -38,7 +38,7 @@ static struct argp_option options[] =
 	{ "yes", 'y', NULL, 0, "Answer all questions with yes (script-friendly)", 0 },
 	{ NULL, 0, NULL, 0, NULL, 0 }
 };
-struct arguments arguments = { 0, 0, NULL, "backup.tar", "backup.index", ARGUMENTS_ALG_NONE };
+struct arguments arguments = { 0, 0, NULL, NULL, NULL, ARGUMENTS_ALG_NONE };
 
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 {
@@ -59,16 +59,19 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		}
 		case 's':
 		{
+			free(arguments->source);
 			arguments->source = realpath(arg, NULL);
 			break;
 		}
 		case 'a':
 		{
+			free(arguments->archive);
 			arguments->archive = realpath(arg, NULL);
 			break;
 		}
 		case 'i':
 		{
+			free(arguments->index);
 			arguments->index = realpath(arg, NULL);
 			break;
 		}
@@ -158,6 +161,9 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 void arguments_parse(int argc, char **argv)
 {
 	struct argp argp = { options, arguments_parse_opt, 0, doc, 0, 0, 0 };
+	
+	arguments.archive = strdup("backup.tar");
+	arguments.index = strdup("backup.index");
 	
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 }

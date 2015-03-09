@@ -1,6 +1,10 @@
 # Incremental Backup in C
 
-Simple incremental backup implementation in C.
+This program is a implementation of an efficient incremental backup solution. It stores file informations in a human-readable textfile (called 'index file'). The backups are stored in tar-archives.
+
+For a full list of options try
+
+    backup --help
 
 ## Features
 
@@ -32,3 +36,15 @@ This program tries to be very efficient. That's why the program is fast and uses
 
 * POSIX for recursive directory walking
 * libarchive for storing the files in an archive
+
+## Tests
+
+### Machine
+
+* Intel Core i5 M480 @ 2.76 GHz x 4
+* 3.7 GiB RAM
+* Arch Linux 64-Bit
+
+### Memory usage test
+
+Memory usage with 856002 files stored from filesystem and 856002 files in index: 123.25 MB
