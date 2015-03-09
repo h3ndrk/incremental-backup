@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,6 +57,9 @@ static struct argp_option options[] =
 };
 struct arguments arguments = { 0, 0, NULL, NULL, NULL, ARGUMENTS_ALG_NONE };
 
+/**
+ * Callback: parses the command line options (see argp.h)
+ */
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 {
 	// Get the input argument from argp_parse, which we know is a pointer to our arguments structure.
@@ -175,6 +178,11 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 	return 0;
 }
 
+/**
+ * Parses command line options
+ * @param argc amount of options
+ * @param argv options as array
+ */
 void arguments_parse(int argc, char **argv)
 {
 	struct argp argp = { options, arguments_parse_opt, 0, doc, 0, 0, 0 };
@@ -185,6 +193,9 @@ void arguments_parse(int argc, char **argv)
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 }
 
+/**
+ * Cleans all allocated memory from option parsing
+ */
 void arguments_cleanup(void)
 {
 	free(arguments.source);

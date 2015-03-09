@@ -13,7 +13,7 @@
 - [x] generate and use absolute paths for everything
 - [x] skip when ignored file should be walked/stored
 - [x] make full backup per argument
-- [ ] commenting all functions and all code
+- [x] commenting all functions and all code
 - [ ] per directory settings (hidden files, exclude)
 - [x] archive and index arguments should be optional
 - [x] README.md: Why another backup program?

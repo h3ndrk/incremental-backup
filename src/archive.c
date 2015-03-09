@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,6 +37,11 @@
 
 static struct archive *archive = NULL;
 
+/**
+ * Intializes a new archive to store files
+ * @param path the path to the new archive
+ * @return always 0
+ */
 int archive_open(char *path)
 {
 	archive = archive_write_new();
@@ -101,6 +106,11 @@ int archive_open(char *path)
 	return 0;
 }
 
+/**
+ * Adds a file to the archive
+ * @param path the path to the file which should be added
+ * @return -1 on error, 0 on success
+ */
 int archive_add_file(char *path)
 {
 	int return_code = 0;
@@ -158,6 +168,7 @@ int archive_add_file(char *path)
 		}
 		if(return_code > ARCHIVE_FAILED)
 		{
+			// copy file into archive
 			input_file_descriptor = open(archive_entry_sourcepath(entry), O_RDONLY);
 			len = read(input_file_descriptor, buff, ARCHIVE_BUFF_SIZE);
 			while(len > 0)
@@ -177,6 +188,9 @@ int archive_add_file(char *path)
 	return 0;
 }
 
+/**
+ * Cleans all allocated memory from archive creation
+ */
 void archive_close(void)
 {
 	archive_write_close(archive);

@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,10 +39,12 @@ int main(int argc, char *argv[])
 {
 	char user_input = 0;
 	
+	// parse arguments
 	arguments_parse(argc, argv);
 	
 	printf("Reading files from filesystem...\n");
 	
+	// store files in filesystem into memory
 	walk(arguments.source, process_file_index, NULL);
 	
 	if(walk_get_error())
@@ -52,6 +54,7 @@ int main(int argc, char *argv[])
 	
 	if(!arguments.full)
 	{
+		// store file informations from index file into memory
 		if(index_process_file(arguments.index, process_file_index_saved) < 0)
 		{
 			printf("Starting full backup.\n");
@@ -77,12 +80,16 @@ int main(int argc, char *argv[])
 	
 	if(user_input == '\n' || user_input == 'y' || user_input == 'Y')
 	{
+		// create new archive file handle
 		archive_open(arguments.archive);
 		
+		// compare files in memory and store them into the archive
 		index_compare_files_with_index();
 		
+		// close archive
 		archive_close();
 		
+		// write updated index file
 		index_write_saved(arguments.index);
 	}
 	else
@@ -90,6 +97,7 @@ int main(int argc, char *argv[])
 		printf("Interrupted by user.\n");
 	}
 	
+	// cleanup
 	index_files_cleanup();
 	index_saved_cleanup();
 	path_exclude_pattern_cleanup();

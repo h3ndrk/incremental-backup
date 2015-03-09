@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,6 +44,13 @@ static long long int index_saved_amount = 0;
 static long long int index_files_get_by_path(char *path, long long int path_length);
 static long long int index_saved_get_by_path(char *path, long long int path_length);
 
+/**
+ * Adds a file to the file list of files from filesystem
+ * @param timestamp the timestamp of the file
+ * @param path the path of the file
+ * @param flag a flag used for internal comparing
+ * @return -1 on error, 0 on success
+ */
 int index_files_add(long long int timestamp, char *path, char flag)
 {
 	index_file *backup_index = index_files;
@@ -81,6 +88,9 @@ int index_files_add(long long int timestamp, char *path, char flag)
 	return 0;
 }
 
+/**
+ * Cleans all allocated memory from file indexing
+ */
 void index_files_cleanup(void)
 {
 	long long int i = 0;
@@ -93,6 +103,12 @@ void index_files_cleanup(void)
 	free(index_files);
 }
 
+/**
+ * Retrieves array-id of the first file found by path
+ * @param path the path of the file to search
+ * @param path_length the length of the path
+ * @return the found array-id or -1 when nothing found
+ */
 static long long int index_files_get_by_path(char *path, long long int path_length)
 {
 	long long int i = 0;
@@ -108,6 +124,12 @@ static long long int index_files_get_by_path(char *path, long long int path_leng
 	return -1;
 }
 
+/**
+ * Retrieves timestamp of the first file found by path
+ * @param path the path of the file to search
+ * @param path_length the length of the path
+ * @return the found timestamp or -1 when nothing found
+ */
 long long int index_files_get_timestamp_by_path(char *path, long long int path_length)
 {
 	long long int index = 0;
@@ -131,6 +153,11 @@ long long int index_files_get_timestamp_by_path(char *path, long long int path_l
 	return index_files[index].timestamp;
 }
 
+/**
+ * Retrieves array-id of the first file found by array-id
+ * @param index the array-id of the file
+ * @return the found timestamp or -1 when nothing found
+ */
 long long int index_files_get_timestamp_by_index(long long int index)
 {
 	if(index < 0)
@@ -150,11 +177,21 @@ long long int index_files_get_timestamp_by_index(long long int index)
 	return index_files[index].timestamp;
 }
 
+/**
+ * Returns the amount of files in the index
+ * @return the amount
+ */
 long long int index_files_get_amount(void)
 {
 	return index_files_amount;
 }
 
+/**
+ * Reads index file and stores all entries into memory
+ * @param path the path of the index file
+ * @param callback a callback function which should be executed for each entry in the index file
+ * @return -1 on error, 0 on success
+ */
 int index_process_file(char *path, void (*callback_index_process_file)(long long int timestamp, char *path))
 {
 	FILE *index_file = NULL;
@@ -172,6 +209,7 @@ int index_process_file(char *path, void (*callback_index_process_file)(long long
 	
 	printf("Reading files from index...\n");
 	
+	// open index file
 	if((index_file = fopen(path, "r")) == NULL)
 	{
 		fprintf(stderr, "Failed to open index file: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
@@ -179,6 +217,7 @@ int index_process_file(char *path, void (*callback_index_process_file)(long long
 		return -1;
 	}
 	
+	// read every line
 	while((read = getline(&line, &len, index_file)) != -1)
 	{
 		space_position = strchr(line, ' ') - line;
@@ -200,6 +239,13 @@ int index_process_file(char *path, void (*callback_index_process_file)(long long
 	return 0;
 }
 
+/**
+ * Adds a file to the file list of files from index file
+ * @param timestamp the timestamp of the file
+ * @param path the path of the file
+ * @param flag a flag used for internal comparing
+ * @return -1 on error, 0 on success
+ */
 int index_saved_add(long long int timestamp, char *path, char flag)
 {
 	index_file *backup_index = index_saved;
@@ -237,6 +283,9 @@ int index_saved_add(long long int timestamp, char *path, char flag)
 	return 0;
 }
 
+/**
+ * Cleans all allocated memory from file indexing
+ */
 void index_saved_cleanup(void)
 {
 	long long int i = 0;
@@ -249,6 +298,12 @@ void index_saved_cleanup(void)
 	free(index_saved);
 }
 
+/**
+ * Retrieves array-id of the first file found by path
+ * @param path the path of the file to search
+ * @param path_length the length of the path
+ * @return the found array-id or -1 when nothing found
+ */
 static long long int index_saved_get_by_path(char *path, long long int path_length)
 {
 	long long int i = 0;
@@ -264,6 +319,12 @@ static long long int index_saved_get_by_path(char *path, long long int path_leng
 	return -1;
 }
 
+/**
+ * Retrieves timestamp of the first file found by path
+ * @param path the path of the file to search
+ * @param path_length the length of the path
+ * @return the found timestamp or -1 when nothing found
+ */
 long long int index_saved_get_timestamp_by_path(char *path, long long int path_length)
 {
 	long long int index = 0;
@@ -285,6 +346,11 @@ long long int index_saved_get_timestamp_by_path(char *path, long long int path_l
 	return index_saved[index].timestamp;
 }
 
+/**
+ * Retrieves array-id of the first file found by array-id
+ * @param index the array-id of the file
+ * @return the found timestamp or -1 when nothing found
+ */
 long long int index_saved_get_timestamp_by_index(long long int index)
 {
 	if(index < 0)
@@ -302,11 +368,18 @@ long long int index_saved_get_timestamp_by_index(long long int index)
 	return index_saved[index].timestamp;
 }
 
+/**
+ * Returns the amount of files in the index
+ * @return the amount
+ */
 long long int index_saved_get_amount(void)
 {
 	return index_saved_amount;
 }
 
+/**
+ * Compares all files in memory and stores files which are missing
+ */
 void index_compare_files_with_index(void)
 {
 	long long int i = 0;
@@ -346,6 +419,11 @@ void index_compare_files_with_index(void)
 	}
 }
 
+/**
+ * Writes a new index file to the given path
+ * @param path the path to the index file
+ * @return -1 on error, 0 on success
+ */
 int index_write_saved(char *path)
 {
 	long long int i = 0;
@@ -353,6 +431,7 @@ int index_write_saved(char *path)
 	
 	printf("Writing index to %s\n", path);
 	
+	// open index file
 	if((saved_file_descriptor = fopen(path, "w")) == NULL)
 	{
 		fprintf(stderr, "Failed to open diff file: (%s, line %i)\n", __FILE__, __LINE__);
@@ -360,6 +439,7 @@ int index_write_saved(char *path)
 		return -1;
 	}
 	
+	// write every entry from memory
 	for(i = 0; i < index_saved_amount; i++)
 	{
 		if(index_saved[i].flag == 1)

@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,12 +39,22 @@ static char error = 0;
 static long long int error_open_dir = 0;
 static long long int error_read_stat = 0;
 
+/**
+ * Walks recursively through a directory and calls callback functions for each file or directory
+ * @param path the path of the top level directory
+ * @param callback the file callback
+ * @param callback the directory callback
+ * @return -1 on error, 0 on success
+ */
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path))
 {
 	struct dirent *file = NULL;
 	DIR *directory = NULL;
 	struct stat stats;
 	char *file_path = NULL;
+	
+	// resetting error
+	error = 0;
 	
 	// open directory
 	if(!(directory = opendir(path)))
@@ -53,7 +63,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		error_open_dir++;
 		
 		fprintf(stderr, "Failed to open directory: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
-		return 1;
+		return -1;
 	}
 	
 	// loop through files
@@ -130,16 +140,28 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 	return 0;
 }
 
+/**
+ * Returns the error state of the previous directory walking
+ * @return 0 for no error, 1 for occurred errors
+ */
 int walk_get_error(void)
 {
 	return error;
 }
 
+/**
+ * Returns the amount of open dir errors
+ * @return the amount
+ */
 long long int walk_get_error_open_dir(void)
 {
 	return error_open_dir;
 }
 
+/**
+ * Returns the amount of read stat errors
+ * @return the amount
+ */
 long long int walk_get_error_read_stat(void)
 {
 	return error_read_stat;

@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,6 +39,12 @@ static char **path_exclude_patterns = NULL;
 static long long int path_exclude_patterns_amount = 0;
 static char path_skip_hidden_files_state = 0; // 1 = hidden files will be skipped
 
+/**
+ * Concatenates a prefix and a suffix path together and adds a '/' in the middle
+ * @param prefix the prefix path
+ * @param suffix the suffix path
+ * @return an allocated concatenated path (should be freed)
+ */
 char *concatenate_paths(char *prefix, char *suffix)
 {
 	char *complete_path = NULL;
@@ -66,6 +72,14 @@ char *concatenate_paths(char *prefix, char *suffix)
 	return complete_path;
 }
 
+/**
+ * Fast path compare: Compares from the back which should be faster than strcmp for long paths
+ * @param path0 the first path
+ * @param path0_length the length of the first path
+ * @param path1 the second path
+ * @param path1_length the length of the second path
+ * @return 1 for equality, 0 for different paths
+ */
 int compare_paths(char *path0, long long int path0_length, char *path1, long long int path1_length)
 {
 	long long int offset = 0;
@@ -88,6 +102,11 @@ int compare_paths(char *path0, long long int path0_length, char *path1, long lon
 	return 1;
 }
 
+/**
+ * Adds a pattern to the exclude pattern list
+ * @param pattern the shell wildcard pattern
+ * @return -1 on error, 0 on success
+ */
 int path_exclude_pattern_add(char *pattern)
 {
 	char **backup_path_exclude_patterns = path_exclude_patterns;
@@ -119,6 +138,9 @@ int path_exclude_pattern_add(char *pattern)
 	return 0;
 }
 
+/**
+ * Cleans all allocated memory from pattern exclusion
+ */
 void path_exclude_pattern_cleanup(void)
 {
 	long long int i = 0;
@@ -131,6 +153,11 @@ void path_exclude_pattern_cleanup(void)
 	free(path_exclude_patterns);
 }
 
+/**
+ * Compares give path with all added exclude patterns
+ * @param path the path to be tested
+ * @return 1 on match, 0 when no exclude pattern matches
+ */
 int path_exclude_pattern_match(char *path)
 {
 	long long int i = 0;
@@ -146,11 +173,19 @@ int path_exclude_pattern_match(char *path)
 	return 0;
 }
 
-void path_skip_hidden_files(char state) // 0 = disable, 1 = enable
+/**
+ * Sets the state to skip hidden files
+ * @param state 0 = disable, 1 = enable
+ */
+void path_skip_hidden_files(char state)
 {
 	path_skip_hidden_files_state = state;
 }
 
+/**
+ * Returns the state to skip hidden files
+ * @return 0 = disabled, 1 = enabled
+ */
 int path_get_skip_hidden_files(void)
 {
 	return path_skip_hidden_files_state;

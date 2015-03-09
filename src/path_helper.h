@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ */
 
 char *concatenate_paths(char *prefix, char *suffix);
 int compare_paths(char *path0, long long int path0_length, char *path1, long long int path1_length);
