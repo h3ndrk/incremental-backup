@@ -2,7 +2,7 @@
 
 This program is a implementation of an efficient incremental backup solution. It stores file informations in a human-readable textfile (called 'index file'). The backups are stored in tar-archives.
 
-For a full list of options try
+For a full list of options try:
 
     backup --help
 

@@ -16,4 +16,4 @@
 - [ ] commenting all functions and all code
 - [ ] per directory settings (hidden files, exclude)
 - [x] archive and index arguments should be optional
-- [ ] README.md: Why another backup program?
+- [x] README.md: Why another backup program?
