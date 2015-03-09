@@ -27,6 +27,7 @@ For a full list of options try:
 * backup archive as (compressed) tar file
 * exclude patterns per command line option
 * skip hidden files per command line option
+* [Doxygen](http://www.stack.nl/~dimitri/doxygen/index.html) support
 
 ## Why another backup program?
 
