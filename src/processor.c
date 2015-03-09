@@ -56,6 +56,7 @@ void process_file_index(char *path)
 
 /**
  * Callback: Stores the given file into memory
+ * @param timestamp the timestamp of the file
  * @param path the file which should be added
  */
 void process_file_index_saved(long long int timestamp, char *path)

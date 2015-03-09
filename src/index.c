@@ -189,7 +189,7 @@ long long int index_files_get_amount(void)
 /**
  * Reads index file and stores all entries into memory
  * @param path the path of the index file
- * @param callback a callback function which should be executed for each entry in the index file
+ * @param callback_index_process_file a callback function which should be executed for each entry in the index file
  * @return -1 on error, 0 on success
  */
 int index_process_file(char *path, void (*callback_index_process_file)(long long int timestamp, char *path))

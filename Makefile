@@ -61,3 +61,6 @@ bin/obj/arguments.o: src/arguments.c
 
 clean:
 	rm -Rf bin
+
+doc:
+	doxygen Doxyfile

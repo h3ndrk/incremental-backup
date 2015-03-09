@@ -42,8 +42,8 @@ static long long int error_read_stat = 0;
 /**
  * Walks recursively through a directory and calls callback functions for each file or directory
  * @param path the path of the top level directory
- * @param callback the file callback
- * @param callback the directory callback
+ * @param callback_process_files the file callback
+ * @param callback_process_directories the directory callback
  * @return -1 on error, 0 on success
  */
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path))
