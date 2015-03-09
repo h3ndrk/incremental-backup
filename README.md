@@ -64,5 +64,4 @@ Memory usage with 856002 files stored from filesystem and 856002 files stored fr
 
 lastest GPL-license (see LICENSE-file)
 
-NIPE-SYSTEMS
-[http://www.nipe-systems.de](http://www.nipe-systems.de)
+Copyright (C) 2015 NIPE-SYSTEMS, [http://www.nipe-systems.de](http://www.nipe-systems.de)
