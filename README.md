@@ -32,6 +32,17 @@ For a full list of options try:
 
 This program tries to be very efficient. That's why the program is fast and uses a tiny amount of memory. In addition it supports incremental backups as a core feature. On the other hand the efficiency does not mean that it has less features. The user is able to use a bunch of features like several mainly used compression algorithms. These characteristics make this backup program an individual program with features that other programs do not have.
 
+## Installation
+
+1. Install all libraries for the program (POSIX, libarchive)
+2. Go into the directory of the program (where `Makefile` is stored): `cd path/to/the/program`
+3. Compile the program: `make`
+4. The program is located in `bin/backup`
+
+For a full list of options try:
+
+    bin/backup --help
+
 ## Used libraries
 
 * POSIX for recursive directory walking
