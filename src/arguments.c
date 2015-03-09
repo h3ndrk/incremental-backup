@@ -27,8 +27,8 @@ static struct argp_option options[] =
 {
 	{ NULL, 0, NULL, 0, "I/O options", 1 },
 	{ "source", 's', "PATH", 0, "Path to the directory which should be stored in backup (REQUIRED)", 0 },
-	{ "archive", 'a', "FILE", 0, "Path to the generated archive (REQUIRED)", 0 },
-	{ "index", 'i', "FILE", 0, "Path to the index file (REQUIRED)", 0 },
+	{ "archive", 'a', "FILE", 0, "Path to the generated archive, default: 'backup.tar'", 0 },
+	{ "index", 'i', "FILE", 0, "Path to the index file, default: 'backup.index'", 0 },
 	{ "compress", 'c', "ALGORITHM", 0, "Possible ALGORITHM values: 'b64encode', 'bzip2', 'compress', 'grzip', 'gzip', 'lrzip', 'lzip', 'lzop', 'uuencode', 'xz'", 0 },
 	{ NULL, 0, NULL, 0, "Recursivly directory walking options", 2 },
 	{ "exclude", 'e', "PATTERN", 0, "Exclude files and directories which match the shell wildcard pattern PATTERN", 0 },
@@ -38,7 +38,7 @@ static struct argp_option options[] =
 	{ "yes", 'y', NULL, 0, "Answer all questions with yes (script-friendly)", 0 },
 	{ NULL, 0, NULL, 0, NULL, 0 }
 };
-struct arguments arguments = { 0, 0, NULL, NULL, NULL, ARGUMENTS_ALG_NONE };
+struct arguments arguments = { 0, 0, NULL, "backup.tar", "backup.index", ARGUMENTS_ALG_NONE };
 
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 {
@@ -139,7 +139,7 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		}
 		case ARGP_KEY_END:
 		{
-			if(arguments->source == NULL || arguments->archive == NULL || arguments->index == NULL)
+			if(arguments->source == NULL)
 			{
 				argp_usage(state);
 			}

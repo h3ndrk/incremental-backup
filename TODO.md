@@ -15,4 +15,5 @@
 - [x] make full backup per argument
 - [ ] commenting all functions and all code
 - [ ] per directory settings (hidden files, exclude)
-- [ ] archive and index arguments should be optional
+- [x] archive and index arguments should be optional
+- [ ] README.md: Why another backup program?
