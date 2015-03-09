@@ -47,4 +47,4 @@ This program tries to be very efficient. That's why the program is fast and uses
 
 ### Memory usage test
 
-Memory usage with 856002 files stored from filesystem and 856002 files in index: 123.25 MB
+Memory usage with 856002 files stored from filesystem and 856002 files stored from index: 123.25 MB
