@@ -27,6 +27,7 @@
 #include <fcntl.h>
 #include <fnmatch.h>
 #include <argp.h>
+#include <errno.h>
 
 #include "walk.h"
 #include "processor.h"
@@ -53,9 +54,10 @@ static struct argp_option options[] =
 	{ NULL, 0, NULL, 0, "General options", 3 },
 	{ "full", 'f', NULL, 0, "Ignore index file and make a full backup", 0 },
 	{ "yes", 'y', NULL, 0, "Answer all questions with yes (script-friendly)", 0 },
+	{ "verbose", 'v', NULL, 0, "Verbose output", 0 },
 	{ NULL, 0, NULL, 0, NULL, 0 }
 };
-struct arguments arguments = { 0, 0, NULL, NULL, NULL, ARGUMENTS_ALG_NONE };
+struct arguments arguments = { 0, 0, NULL, NULL, NULL, ARGUMENTS_ALG_NONE, 0 };
 
 /**
  * Callback: parses the command line options (see argp.h)
@@ -80,19 +82,19 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		case 's':
 		{
 			free(arguments->source);
-			arguments->source = realpath(arg, NULL);
+			arguments->source = strdup(arg);
 			break;
 		}
 		case 'a':
 		{
 			free(arguments->archive);
-			arguments->archive = realpath(arg, NULL);
+			arguments->archive = strdup(arg);
 			break;
 		}
 		case 'i':
 		{
 			free(arguments->index);
-			arguments->index = realpath(arg, NULL);
+			arguments->index = strdup(arg);
 			break;
 		}
 		case 'f':
@@ -103,6 +105,11 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		case 'y':
 		{
 			arguments->yes = 1;
+			break;
+		}
+		case 'v':
+		{
+			arguments->verbose = 1;
 			break;
 		}
 		case 'c':

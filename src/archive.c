@@ -113,6 +113,11 @@ int archive_open(char *path)
  */
 int archive_add_file(char *path)
 {
+	if(arguments.verbose)
+	{
+		printf("%s\n", path);
+	}
+	
 	int return_code = 0;
 	struct archive_entry *entry = NULL;
 	struct archive *file = NULL;
@@ -169,7 +174,15 @@ int archive_add_file(char *path)
 		if(return_code > ARCHIVE_FAILED)
 		{
 			// copy file into archive
-			input_file_descriptor = open(archive_entry_sourcepath(entry), O_RDONLY);
+			input_file_descriptor = open(path, O_RDONLY);
+			if(input_file_descriptor < 0)
+			{
+				fprintf(stderr, "Failed to open write stream: (%s, line %i)\n", __FILE__, __LINE__);
+				
+				archive_entry_free(entry);
+				break;
+			}
+			
 			len = read(input_file_descriptor, buff, ARCHIVE_BUFF_SIZE);
 			while(len > 0)
 			{

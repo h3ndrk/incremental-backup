@@ -80,7 +80,7 @@ int index_files_add(long long int timestamp, char *path, char flag)
 	index_files[index_files_amount - 1].path_length = strlen(path);
 	index_files[index_files_amount - 1].flag = flag;
 	
-	if(!(index_files_amount % 100000))
+	if(!(index_files_amount % 10000))
 	{
 		printf("%lli files indexed\n", index_files_amount);
 	}
@@ -275,7 +275,7 @@ int index_saved_add(long long int timestamp, char *path, char flag)
 	index_saved[index_saved_amount - 1].path_length = strlen(path);
 	index_saved[index_saved_amount - 1].flag = flag;
 	
-	if(!(index_saved_amount % 100000))
+	if(!(index_saved_amount % 10000))
 	{
 		printf("%lli saved files indexed\n", index_saved_amount);
 	}
@@ -390,6 +390,11 @@ void index_compare_files_with_index(void)
 	
 	for(i = 0; i < index_files_amount; i++)
 	{
+		if(!(i % 10000))
+		{
+			printf("%lli files compared\n", i);
+		}
+		
 		index = index_saved_get_by_path(index_files[i].path, index_files[i].path_length);
 		timestamp = index_saved_get_timestamp_by_index(index);
 		
@@ -402,7 +407,6 @@ void index_compare_files_with_index(void)
 		// add or update files in index
 		if(timestamp < 0)
 		{
-			printf("%s\n", index_files[i].path);
 			archive_add_file(index_files[i].path);
 			index_saved_add(index_files[i].timestamp, index_files[i].path, 1);
 			
@@ -410,7 +414,6 @@ void index_compare_files_with_index(void)
 		}
 		if(timestamp < index_files[i].timestamp)
 		{
-			printf("%s\n", index_files[i].path);
 			archive_add_file(index_files[i].path);
 			index_saved[index].timestamp = index_files[i].timestamp;
 			
