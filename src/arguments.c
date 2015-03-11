@@ -38,7 +38,7 @@
 
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state);
 
-const char *argp_program_version = "backup 0.0.3-beta";
+const char *argp_program_version = "backup 0.0.4-beta";
 const char *argp_program_bug_address = "https://github.com/NIPE-SYSTEMS/incremental-backup/issues";
 static const char *doc = "Simple incremental backup implementation in C.";
 static struct argp_option options[] =
