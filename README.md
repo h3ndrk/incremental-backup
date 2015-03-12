@@ -29,6 +29,35 @@ For a full list of options try:
 * skip hidden files per command line option
 * [Doxygen](http://www.stack.nl/~dimitri/doxygen/index.html) support
 
+## Usage
+
+    Usage: backup [OPTION...]
+    Simple incremental backup implementation in C.
+    
+     I/O options
+      -a, --archive=FILE         Path to the generated archive, default:
+                                 'backup.tar'
+      -c, --compress=ALGORITHM   Possible ALGORITHM values: 'b64encode', 'bzip2',
+                                 'compress', 'grzip', 'gzip', 'lrzip', 'lzip',
+                                 'lzop', 'uuencode', 'xz'
+      -i, --index=FILE           Path to the index file, default: 'backup.index'
+      -s, --source=PATH          Path to the directory which should be stored in
+                                 backup (REQUIRED)
+    
+     Recursivly directory walking options
+      -e, --exclude=PATTERN      Exclude files and directories which match the
+                                 shell wildcard pattern PATTERN
+      -S, --skip-hidden          Skip hidden files (leading '.' in file name)
+    
+     General options
+      -f, --full                 Ignore index file and make a full backup
+      -v, --verbose              Verbose output
+      -y, --yes                  Answer all questions with yes (script-friendly)
+    
+      -?, --help                 Give this help list
+          --usage                Give a short usage message
+      -V, --version              Print program version
+
 ## Why another backup program?
 
 This program tries to be very efficient. That's why the program is fast and uses a tiny amount of memory. In addition it supports incremental backups as a core feature. On the other hand the efficiency does not mean that it has less features. The user is able to use a bunch of features like several mainly used compression algorithms. These characteristics make this backup program an individual program with features that other programs do not have.
