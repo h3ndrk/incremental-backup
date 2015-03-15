@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	
 	if(arguments.show_stats)
 	{
-		printf("Backup statistics:\n\n    %15li files processed\n    %15li files archived\n    %15li seconds elapsed\n    %15f files per second", walked_files_amount, archived_files_amount, time(NULL) - start_time, (float)archived_files_amount / (time(NULL) - start_time));
+		printf("\nBackup statistics:\n\n    %15li files processed\n    %15li files archived\n    %15li seconds elapsed\n    %15f files per second\n", walked_files_amount, archived_files_amount, time(NULL) - start_time, (float)archived_files_amount / (time(NULL) - start_time));
 	}
 	
 	// cleanup
