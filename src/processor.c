@@ -78,14 +78,13 @@ void process_file_check(char *path)
 	struct stat stats_index;
 	FILE *index_file = NULL;
 	struct timeval times[2];
-	char ignore = 0; // true = 1
 	
-	if(arguments.full)
-	{
-		archive_add_file(path);
+	// if(arguments.full)
+	// {
+	// 	archive_add_file(path);
 		
-		return;
-	}
+	// 	return;
+	// }
 	
 	char *index_path = concatenate_paths(arguments.index, path);
 	
@@ -126,16 +125,11 @@ void process_file_check(char *path)
 		return;
 	}
 	
-	if(!ignore)
+	if(arguments.full || path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_index.st_mtim.tv_sec) > 0)
 	{
-		// int r = path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec);
-		// printf("%s: { %li, %li } %s%s { %li, %li } %s\n", path, stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, ((r < 0)?("OLDER "):("")), ((r==0)?("="):("<>")), stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec, ((r > 0)?("OLDER"):("")));
-		if(path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_index.st_mtim.tv_sec) > 0)
-		{
-			utimes(index_path, times);
-			
-			archive_add_file(path);
-		}
+		utimes(index_path, times);
+		
+		archive_add_file(path);
 	}
 	
 	free(index_path);
