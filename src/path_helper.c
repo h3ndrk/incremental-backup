@@ -211,18 +211,8 @@ int path_get_skip_hidden_files(void)
  */
 int path_compare_timestamps(long int tv_sec0, long tv_usec0, long int tv_sec1, long tv_usec1)
 {
-	if(tv_sec0 == tv_sec1)
+	if(tv_sec0 > tv_sec1)
 	{
-		if(tv_usec0 == tv_usec1)
-		{
-			return 0;
-		}
-		
-		if(tv_usec0 < tv_usec1)
-		{
-			return -1;
-		}
-		
 		return 1;
 	}
 	
@@ -231,7 +221,7 @@ int path_compare_timestamps(long int tv_sec0, long tv_usec0, long int tv_sec1, l
 		return -1;
 	}
 	
-	return 1;
+	return 0;
 }
 
 /**
@@ -239,7 +229,7 @@ int path_compare_timestamps(long int tv_sec0, long tv_usec0, long int tv_sec1, l
  * @param file_path the path to be created (must have a / at the end)
  * @param mode the directory mode
  */
-int mkpath(char *file_path, mode_t mode)
+int path_mkpath(char *file_path, mode_t mode)
 {
 	char *p;
 	

@@ -78,6 +78,7 @@ void process_file_check(char *path)
 	struct stat stats_index;
 	FILE *index_file = NULL;
 	struct timeval times[2];
+	char ignore = 0; // true = 1
 	
 	char *index_path = concatenate_paths("/home/hendrik/Programme/incremental-backup/test", path);
 	
@@ -110,7 +111,7 @@ void process_file_check(char *path)
 	}
 	
 	// get index stats
-	if(lstat(index_path, &stats_fs) < 0)
+	if(lstat(index_path, &stats_index) < 0)
 	{
 		fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
 		free(index_path);
@@ -118,7 +119,11 @@ void process_file_check(char *path)
 		return;
 	}
 	
-	printf("Compared timestamps: %i\n", path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec));
+	if(!ignore)
+	{
+		int r = path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec);
+		printf("%s: { %li, %li } %s%s { %li, %li } %s\n", path, stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, ((r < 0)?("OLDER "):("")), ((r==0)?("="):("<>")), stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec, ((r > 0)?("OLDER"):("")));
+	}
 	
 	free(index_path);
 }
@@ -129,9 +134,7 @@ void process_directory_check(char *path)
 	char *index_path = concatenate_paths(index_path_temp, "");
 	free(index_path_temp);
 	
-	printf("Creating directory: %s\n", index_path);
-	
-	printf("%i\n", mkpath(index_path, 0775));
+	path_mkpath(index_path, 0775);
 	
 	free(index_path);
 }
