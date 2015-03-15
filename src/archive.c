@@ -27,6 +27,8 @@
 #include <fcntl.h>
 #include <fnmatch.h>
 #include <argp.h>
+#include <utime.h> // utimes
+#include <sys/time.h> // utimes
 
 #include "walk.h"
 #include "processor.h"

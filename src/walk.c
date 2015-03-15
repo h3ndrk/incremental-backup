@@ -27,6 +27,8 @@
 #include <fcntl.h>
 #include <fnmatch.h>
 #include <argp.h>
+#include <utime.h> // utimes
+#include <sys/time.h> // utimes
 
 #include "walk.h"
 #include "processor.h"
@@ -36,8 +38,8 @@
 #include "arguments.h"
 
 static char error = 0;
-static long long int error_open_dir = 0;
-static long long int error_read_stat = 0;
+static long int error_open_dir = 0;
+static long int error_read_stat = 0;
 
 /**
  * Walks recursively through a directory and calls callback functions for each file or directory
@@ -153,7 +155,7 @@ int walk_get_error(void)
  * Returns the amount of open dir errors
  * @return the amount
  */
-long long int walk_get_error_open_dir(void)
+long int walk_get_error_open_dir(void)
 {
 	return error_open_dir;
 }
@@ -162,7 +164,7 @@ long long int walk_get_error_open_dir(void)
  * Returns the amount of read stat errors
  * @return the amount
  */
-long long int walk_get_error_read_stat(void)
+long int walk_get_error_read_stat(void)
 {
 	return error_read_stat;
 }

@@ -1,4 +1,3 @@
-#include <stdio.h>
 /**
  * Copyright (C) 2015 NIPE-SYSTEMS
  * 
@@ -16,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h> // strcmp
 #include <dirent.h> // opendir, readdir, closedir
@@ -27,6 +27,8 @@
 #include <fcntl.h>
 #include <fnmatch.h>
 #include <argp.h>
+#include <utime.h> // utimes
+#include <sys/time.h> // utimes
 
 #include "walk.h"
 #include "processor.h"
@@ -59,7 +61,77 @@ void process_file_index(char *path)
  * @param timestamp the timestamp of the file
  * @param path the file which should be added
  */
-void process_file_index_saved(long long int timestamp, char *path)
+void process_file_index_saved(long int timestamp, char *path)
 {
 	index_saved_add(timestamp, path, 0);
+}
+
+/**
+ * Callback: Checks if the file exists in index. If not it will be created. If the
+ * file exists the last modified date will be checked and updated if the file in
+ * the filesystem is newer.
+ * @param path the path of the file that should be checked
+ */
+void process_file_check(char *path)
+{
+	struct stat stats_fs;
+	struct stat stats_index;
+	FILE *index_file = NULL;
+	struct timeval times[2];
+	
+	char *index_path = concatenate_paths("/home/hendrik/Programme/incremental-backup/test", path);
+	
+	// get filesystem stats
+	if(lstat(path, &stats_fs) < 0)
+	{
+		fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
+		free(index_path);
+		
+		return;
+	}
+	
+	// store modified time
+	times[0].tv_sec = stats_fs.st_mtim.tv_sec;
+	times[0].tv_usec = stats_fs.st_mtim.tv_nsec / 1000;
+	times[1].tv_sec = stats_fs.st_mtim.tv_sec;
+	times[1].tv_usec = stats_fs.st_mtim.tv_nsec / 1000;
+	
+	if(access(index_path, F_OK) == -1)
+	{
+		printf("Creating file:      %s\n", index_path);
+		
+		// create new file in index
+		if((index_file = fopen(index_path, "w")))
+		{
+			fclose(index_file);
+			
+			utimes(index_path, times);
+		}
+	}
+	
+	// get index stats
+	if(lstat(index_path, &stats_fs) < 0)
+	{
+		fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
+		free(index_path);
+		
+		return;
+	}
+	
+	printf("Compared timestamps: %i\n", path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec));
+	
+	free(index_path);
+}
+
+void process_directory_check(char *path)
+{
+	char *index_path_temp = concatenate_paths("/home/hendrik/Programme/incremental-backup/test", path);
+	char *index_path = concatenate_paths(index_path_temp, "");
+	free(index_path_temp);
+	
+	printf("Creating directory: %s\n", index_path);
+	
+	printf("%i\n", mkpath(index_path, 0775));
+	
+	free(index_path);
 }

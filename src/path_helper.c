@@ -27,6 +27,8 @@
 #include <fcntl.h>
 #include <fnmatch.h>
 #include <argp.h>
+#include <utime.h> // utimes
+#include <sys/time.h> // utimes
 
 #include "walk.h"
 #include "processor.h"
@@ -36,7 +38,7 @@
 #include "arguments.h"
 
 static char **path_exclude_patterns = NULL;
-static long long int path_exclude_patterns_amount = 0;
+static long int path_exclude_patterns_amount = 0;
 static char path_skip_hidden_files_state = 0; // 1 = hidden files will be skipped
 
 /**
@@ -49,14 +51,21 @@ char *concatenate_paths(char *prefix, char *suffix)
 {
 	char *complete_path = NULL;
 	char *prefix_copy = strdup(prefix);
+	char *suffix_copy = suffix;
 	
-	// remove last /
+	// remove last / from prefix
 	if(prefix_copy[strlen(prefix_copy) - 1] == '/')
 	{
 		prefix_copy[strlen(prefix_copy) - 1] =  '\0';
 	}
 	
-	if(!(complete_path = malloc((strlen(prefix_copy) + 1 + strlen(suffix) + 1) * sizeof(char))))
+	// remove first / from suffix
+	if(*suffix_copy == '/')
+	{
+		suffix_copy++;
+	}
+	
+	if(!(complete_path = malloc((strlen(prefix_copy) + 1 + strlen(suffix_copy) + 1) * sizeof(char))))
 	{
 		fprintf(stderr, "Failed to concatenate paths: %s, %i\n", __FILE__, __LINE__);
 		
@@ -65,7 +74,7 @@ char *concatenate_paths(char *prefix, char *suffix)
 	
 	strcpy(complete_path, prefix_copy);
 	strcat(complete_path, "/");
-	strcat(complete_path, suffix);
+	strcat(complete_path, suffix_copy);
 	
 	free(prefix_copy);
 	
@@ -80,9 +89,9 @@ char *concatenate_paths(char *prefix, char *suffix)
  * @param path1_length the length of the second path
  * @return 1 for equality, 0 for different paths
  */
-int compare_paths(char *path0, long long int path0_length, char *path1, long long int path1_length)
+int compare_paths(char *path0, long int path0_length, char *path1, long int path1_length)
 {
-	long long int offset = 0;
+	long int offset = 0;
 	
 	if(path0_length != path1_length)
 	{
@@ -143,7 +152,7 @@ int path_exclude_pattern_add(char *pattern)
  */
 void path_exclude_pattern_cleanup(void)
 {
-	long long int i = 0;
+	long int i = 0;
 	
 	for(i = 0; i < path_exclude_patterns_amount; i++)
 	{
@@ -160,7 +169,7 @@ void path_exclude_pattern_cleanup(void)
  */
 int path_exclude_pattern_match(char *path)
 {
-	long long int i = 0;
+	long int i = 0;
 	
 	for(i = 0; i < path_exclude_patterns_amount; i++)
 	{
@@ -189,4 +198,67 @@ void path_skip_hidden_files(char state)
 int path_get_skip_hidden_files(void)
 {
 	return path_skip_hidden_files_state;
+}
+
+/**
+ * Compare timestamps (tv_sec and tv_usec)
+ * @param tv_sec0 seconds of first timestamp
+ * @param tv_usec0 milliseconds of first timestamp
+ * @param tv_sec1 seconds of second timestamp
+ * @param tv_usec1 milliseconds of second timestamp
+ * @return -1 if the first timestamp is older (samller), 0 if the timestamps are equal, 1
+ * if the second timestamp is older (smaller)
+ */
+int path_compare_timestamps(long int tv_sec0, long tv_usec0, long int tv_sec1, long tv_usec1)
+{
+	if(tv_sec0 == tv_sec1)
+	{
+		if(tv_usec0 == tv_usec1)
+		{
+			return 0;
+		}
+		
+		if(tv_usec0 < tv_usec1)
+		{
+			return -1;
+		}
+		
+		return 1;
+	}
+	
+	if(tv_sec0 < tv_sec1)
+	{
+		return -1;
+	}
+	
+	return 1;
+}
+
+/**
+ * Implementation for mkdir -p (taken from: http://stackoverflow.com/a/9210960)
+ * @param file_path the path to be created (must have a / at the end)
+ * @param mode the directory mode
+ */
+int mkpath(char *file_path, mode_t mode)
+{
+	char *p;
+	
+	for(p = strchr(file_path + 1, '/'); p; p = strchr(p + 1, '/'))
+	{
+		*p = '\0';
+		
+		if(mkdir(file_path, mode) == -1)
+		{
+			if(errno != EEXIST)
+			{
+				*p = '/';
+				
+				return -1;
+			}
+		}
+		
+		*p = '/';
+	}
+	
+	return 0;
 }

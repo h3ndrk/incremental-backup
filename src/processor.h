@@ -16,4 +16,6 @@
  */
 
 void process_file_index(char *path);
-void process_file_index_saved(long long int timestamp, char *path);
+void process_file_index_saved(long int timestamp, char *path);
+void process_file_check(char *path);
+void process_directory_check(char *path);
