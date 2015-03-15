@@ -39,19 +39,19 @@
 
 int main(int argc, char *argv[])
 {
-	char user_input = 0;
-	
 	// parse arguments
-	// arguments_parse(argc, argv);
+	arguments_parse(argc, argv);
 	
-	// printf("Reading files from filesystem...\n");
+	archive_open(arguments.archive);
 	
-	// store files in filesystem into memory
-	walk("/home/hendrik/Programme/can", process_file_check, process_directory_check);
+	printf("Storing files...\n");
+	walk(arguments.source, process_file_check, process_directory_check);
+	
+	archive_close();
 	
 	// cleanup
-	// path_exclude_pattern_cleanup();
-	// arguments_cleanup();
+	path_exclude_pattern_cleanup();
+	arguments_cleanup();
 	
 	return 0;
 }

@@ -80,7 +80,14 @@ void process_file_check(char *path)
 	struct timeval times[2];
 	char ignore = 0; // true = 1
 	
-	char *index_path = concatenate_paths("/home/hendrik/Programme/incremental-backup/test", path);
+	if(arguments.full)
+	{
+		archive_add_file(path);
+		
+		return;
+	}
+	
+	char *index_path = concatenate_paths(arguments.index, path);
 	
 	// get filesystem stats
 	if(lstat(path, &stats_fs) < 0)
@@ -99,14 +106,14 @@ void process_file_check(char *path)
 	
 	if(access(index_path, F_OK) == -1)
 	{
-		printf("Creating file:      %s\n", index_path);
-		
 		// create new file in index
 		if((index_file = fopen(index_path, "w")))
 		{
 			fclose(index_file);
 			
 			utimes(index_path, times);
+			
+			archive_add_file(path);
 		}
 	}
 	
@@ -121,8 +128,14 @@ void process_file_check(char *path)
 	
 	if(!ignore)
 	{
-		int r = path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec);
-		printf("%s: { %li, %li } %s%s { %li, %li } %s\n", path, stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, ((r < 0)?("OLDER "):("")), ((r==0)?("="):("<>")), stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec, ((r > 0)?("OLDER"):("")));
+		// int r = path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec);
+		// printf("%s: { %li, %li } %s%s { %li, %li } %s\n", path, stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, ((r < 0)?("OLDER "):("")), ((r==0)?("="):("<>")), stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec, ((r > 0)?("OLDER"):("")));
+		if(path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec) > 0)
+		{
+			utimes(index_path, times);
+			
+			archive_add_file(path);
+		}
 	}
 	
 	free(index_path);
@@ -130,7 +143,7 @@ void process_file_check(char *path)
 
 void process_directory_check(char *path)
 {
-	char *index_path_temp = concatenate_paths("/home/hendrik/Programme/incremental-backup/test", path);
+	char *index_path_temp = concatenate_paths(arguments.index, path);
 	char *index_path = concatenate_paths(index_path_temp, "");
 	free(index_path_temp);
 	
