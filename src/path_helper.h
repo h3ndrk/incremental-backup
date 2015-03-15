@@ -22,5 +22,5 @@ void path_exclude_pattern_cleanup(void);
 int path_exclude_pattern_match(char *path);
 void path_skip_hidden_files(char state);
 int path_get_skip_hidden_files(void);
-int path_compare_timestamps(long int tv_sec0, long tv_usec0, long int tv_sec1, long tv_usec1);
+int path_compare_timestamps(long int tv_sec0, long int tv_sec1);
 int path_mkpath(char *file_path, mode_t mode);

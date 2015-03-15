@@ -57,9 +57,10 @@ static struct argp_option options[] =
 	{ "full", 'f', NULL, 0, "Ignore index file and make a full backup", 0 },
 	{ "yes", 'y', NULL, 0, "Answer all questions with yes (script-friendly)", 0 },
 	{ "verbose", 'v', NULL, 0, "Verbose output", 0 },
+	{ "stats", 't', NULL, 0, "Show stats at the end", 0 },
 	{ NULL, 0, NULL, 0, NULL, 0 }
 };
-struct arguments arguments = { 0, 0, NULL, NULL, NULL, ARGUMENTS_ALG_NONE, 0 };
+struct arguments arguments = { 0, 0, NULL, NULL, NULL, ARGUMENTS_ALG_NONE, 0, 0 };
 
 /**
  * Callback: parses the command line options (see argp.h)
@@ -102,6 +103,11 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		case 'f':
 		{
 			arguments->full = 1;
+			break;
+		}
+		case 't':
+		{
+			arguments->show_stats = 1;
 			break;
 		}
 		case 'y':

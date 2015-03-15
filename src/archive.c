@@ -38,6 +38,7 @@
 #include "arguments.h"
 
 static struct archive *archive = NULL;
+long int archived_files_amount = 0;
 
 /**
  * Intializes a new archive to store files
@@ -119,6 +120,8 @@ int archive_add_file(char *path)
 	{
 		printf("%s\n", path);
 	}
+	
+	archived_files_amount++;
 	
 	int return_code = 0;
 	struct archive_entry *entry = NULL;

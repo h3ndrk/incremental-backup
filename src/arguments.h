@@ -36,6 +36,7 @@ struct arguments
 	char *index;
 	char compression_algorithm;
 	char verbose;
+	char show_stats;
 };
 extern struct arguments arguments;
 

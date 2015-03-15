@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+extern long int walked_files_amount;
+
 int walk(char *path, void (*callback_process_files)(char *path), void (*callback_process_directories)(char *path));
 int walk_get_error(void);
 long int walk_get_error_open_dir(void);

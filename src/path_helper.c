@@ -203,13 +203,11 @@ int path_get_skip_hidden_files(void)
 /**
  * Compare timestamps (tv_sec and tv_usec)
  * @param tv_sec0 seconds of first timestamp
- * @param tv_usec0 milliseconds of first timestamp
  * @param tv_sec1 seconds of second timestamp
- * @param tv_usec1 milliseconds of second timestamp
  * @return -1 if the first timestamp is older (samller), 0 if the timestamps are equal, 1
  * if the second timestamp is older (smaller)
  */
-int path_compare_timestamps(long int tv_sec0, long tv_usec0, long int tv_sec1, long tv_usec1)
+int path_compare_timestamps(long int tv_sec0, long int tv_sec1)
 {
 	if(tv_sec0 > tv_sec1)
 	{

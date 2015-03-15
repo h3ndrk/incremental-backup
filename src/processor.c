@@ -130,7 +130,7 @@ void process_file_check(char *path)
 	{
 		// int r = path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec);
 		// printf("%s: { %li, %li } %s%s { %li, %li } %s\n", path, stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, ((r < 0)?("OLDER "):("")), ((r==0)?("="):("<>")), stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec, ((r > 0)?("OLDER"):("")));
-		if(path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_fs.st_mtim.tv_nsec, stats_index.st_mtim.tv_sec, stats_index.st_mtim.tv_nsec) > 0)
+		if(path_compare_timestamps(stats_fs.st_mtim.tv_sec, stats_index.st_mtim.tv_sec) > 0)
 		{
 			utimes(index_path, times);
 			

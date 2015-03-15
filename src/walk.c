@@ -40,6 +40,7 @@
 static char error = 0;
 static long int error_open_dir = 0;
 static long int error_read_stat = 0;
+long int walked_files_amount = 0;
 
 /**
  * Walks recursively through a directory and calls callback functions for each file or directory
@@ -88,6 +89,8 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		{
 			continue;
 		}
+		
+		walked_files_amount++;
 		
 		// exclude files
 		if(path_exclude_pattern_match(file_path))

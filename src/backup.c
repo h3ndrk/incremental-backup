@@ -39,6 +39,8 @@
 
 int main(int argc, char *argv[])
 {
+	time_t start_time = time(NULL);
+	
 	// parse arguments
 	arguments_parse(argc, argv);
 	
@@ -48,6 +50,11 @@ int main(int argc, char *argv[])
 	walk(arguments.source, process_file_check, process_directory_check);
 	
 	archive_close();
+	
+	if(arguments.show_stats)
+	{
+		printf("Backup statistics:\n\n    %15li files processed\n    %15li files archived\n    %15li seconds elapsed\n    %15f files per second", walked_files_amount, archived_files_amount, time(NULL) - start_time, (float)archived_files_amount / (time(NULL) - start_time));
+	}
 	
 	// cleanup
 	path_exclude_pattern_cleanup();

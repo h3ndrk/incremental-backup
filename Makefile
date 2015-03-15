@@ -33,6 +33,7 @@ tests: init
 	$(CC) src/test/test_array.c -Wall -Wextra -o bin/test_array
 	$(CC) src/test/test_if.c -Wall -Wextra -o bin/test_if
 	$(CC) src/test/test_libarchive.c -Wall -Wextra `pkg-config --cflags libarchive` -o bin/test_libarchive `pkg-config --libs libarchive`
+	$(CC) src/test/test_time.c -Wall -Wextra -o bin/test_time
 
 init:
 	mkdir -p bin
