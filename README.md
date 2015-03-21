@@ -32,7 +32,7 @@ For a full list of options try:
 ## Usage
 
     Usage: backup [OPTION...]
-    Simple incremental backup implementation in C.
+    Incremental backup with tar-archives written in C.
     
      I/O options
       -a, --archive=FILE         Path to the generated archive, default:
@@ -40,7 +40,8 @@ For a full list of options try:
       -c, --compress=ALGORITHM   Possible ALGORITHM values: 'b64encode', 'bzip2',
                                  'compress', 'grzip', 'gzip', 'lrzip', 'lzip',
                                  'lzop', 'uuencode', 'xz'
-      -i, --index=FILE           Path to the index file, default: 'backup.index'
+      -i, --index=FILE           Path to the index directory. This path must exist.
+                                 (REQUIRED)
       -s, --source=PATH          Path to the directory which should be stored in
                                  backup (REQUIRED)
     
@@ -51,8 +52,10 @@ For a full list of options try:
     
      General options
       -f, --full                 Ignore index file and make a full backup
+      -n, --no-output            Do not output status informations
+                                 (script-friendly, parse-friendly)
+      -t, --stats                Show stats at the end
       -v, --verbose              Verbose output
-      -F, --friendly             Answer all questions with yes (script-friendly)
     
       -?, --help                 Give this help list
           --usage                Give a short usage message

@@ -177,7 +177,7 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 		}
 		case ARGP_KEY_END:
 		{
-			if(arguments->source == NULL)
+			if(arguments->source == NULL || arguments->index == NULL)
 			{
 				argp_usage(state);
 			}
@@ -203,7 +203,6 @@ void arguments_parse(int argc, char **argv)
 	struct argp argp = { options, arguments_parse_opt, 0, doc, 0, 0, 0 };
 	
 	arguments.archive = strdup("backup.tar");
-	arguments.index = strdup("backup.index");
 	
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 }
