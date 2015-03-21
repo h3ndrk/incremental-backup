@@ -17,4 +17,5 @@
 - [ ] per directory settings (hidden files, exclude)
 - [x] archive and index arguments should be optional
 - [x] README.md: Why another backup program?
-- [ ] Update program description in `arguments.c`
+- [x] Update program description in `arguments.c`
+- [ ] Walking depth per command line option
