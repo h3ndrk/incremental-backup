@@ -120,8 +120,6 @@ int path_exclude_pattern_add(char *pattern)
 {
 	char **backup_path_exclude_patterns = path_exclude_patterns;
 	
-	printf("Excluding %s\n", pattern);
-	
 	if(path_exclude_patterns == NULL)
 	{
 		if((path_exclude_patterns = malloc((++path_exclude_patterns_amount) * sizeof(char *))) == NULL)
@@ -145,6 +143,22 @@ int path_exclude_pattern_add(char *pattern)
 	path_exclude_patterns[path_exclude_patterns_amount - 1] = strdup(pattern);
 	
 	return 0;
+}
+
+/**
+ * Prints all excluded patterns
+ */
+void path_exclude_pattern_print(void)
+{
+	if(!arguments.no_output)
+	{
+		long int i = 0;
+		
+		for(i = 0; i < path_exclude_patterns_amount; i++)
+		{
+			printf("Excluding %s\n", path_exclude_patterns[i]);
+		}
+	}
 }
 
 /**

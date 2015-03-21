@@ -44,16 +44,22 @@ int main(int argc, char *argv[])
 	// parse arguments
 	arguments_parse(argc, argv);
 	
+	path_exclude_pattern_print();
+	
 	archive_open(arguments.archive);
 	
-	printf("Storing files...\n");
+	if(!arguments.no_output)
+	{
+		printf("Storing files...\n");
+	}
+	
 	walk(arguments.source, process_file_check, process_directory_check);
 	
 	archive_close();
 	
 	if(arguments.show_stats)
 	{
-		printf("\nBackup statistics:\n\n    %15li files processed\n    %15li files archived\n    %15li seconds elapsed\n    %15f files per second\n", walked_files_amount, archived_files_amount, time(NULL) - start_time, (float)archived_files_amount / (time(NULL) - start_time));
+		printf("\nBackup statistics:\n\n    %15li files processed\n    %15li files archived\n    %15li seconds elapsed\n    %15f files archived per second\n    %15f percent of source archived\n\nError statistics:\n\n    %15li open directory errors\n    %15li read file stat errors\n\n", walked_files_amount, archived_files_amount, time(NULL) - start_time, (float)archived_files_amount / (time(NULL) - start_time), (((float)archived_files_amount * 100) / walked_files_amount), walk_get_error_open_dir(), walk_get_error_read_stat());
 	}
 	
 	// cleanup

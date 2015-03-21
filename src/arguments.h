@@ -30,7 +30,7 @@
 struct arguments
 {
 	char full;
-	char yes;
+	char no_output;
 	char *source;
 	char *archive;
 	char *index;

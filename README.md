@@ -1,6 +1,6 @@
 # Incremental Backup in C
 
-This program is a implementation of an efficient incremental backup solution. It stores file informations in a human-readable textfile (called 'index file'). The backups are stored in tar-archives.
+This program is a implementation of an efficient incremental backup solution. It stores file informations in a human-readable folder (called 'index'). The backups can be stored in tar-archives.
 
 For a full list of options try:
 
@@ -52,11 +52,17 @@ For a full list of options try:
      General options
       -f, --full                 Ignore index file and make a full backup
       -v, --verbose              Verbose output
-      -y, --yes                  Answer all questions with yes (script-friendly)
+      -F, --friendly             Answer all questions with yes (script-friendly)
     
       -?, --help                 Give this help list
           --usage                Give a short usage message
       -V, --version              Print program version
+
+### Exclude pattern
+
+The exclude algorithm works with `fnmatch` (man page: [http://linux.die.net/man/3/fnmatch](http://linux.die.net/man/3/fnmatch)). For example:
+
+To exclude all files in `/home` pass **`--exclude /home/*`** because you want to skip all files and directories in `/home`.
 
 ## Why another backup program?
 
@@ -88,7 +94,7 @@ For a full list of options try:
 
 ### Memory usage test
 
-Memory usage with 856002 files stored from filesystem and 856002 files stored from index: 123.25 MB
+Memory usage with 866364 files in filesystem: ca. 8 MB
 
 ## License
 

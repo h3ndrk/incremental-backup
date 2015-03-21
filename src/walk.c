@@ -37,9 +37,9 @@
 #include "index.h"
 #include "arguments.h"
 
-static char error = 0;
-static long int error_open_dir = 0;
-static long int error_read_stat = 0;
+static char walk_error = 0;
+static long int walk_error_open_dir = 0;
+static long int walk_error_read_stat = 0;
 long int walked_files_amount = 0;
 
 /**
@@ -57,13 +57,13 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 	char *file_path = NULL;
 	
 	// resetting error
-	error = 0;
+	walk_error = 0;
 	
 	// open directory
 	if(!(directory = opendir(path)))
 	{
-		error = 1;
-		error_open_dir++;
+		walk_error = 1;
+		walk_error_open_dir++;
 		
 		fprintf(stderr, "Failed to open directory: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
 		return -1;
@@ -95,7 +95,10 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		// exclude files
 		if(path_exclude_pattern_match(file_path))
 		{
-			printf("Skipping %s\n", file_path);
+			if(!arguments.no_output)
+			{
+				printf("Skipping %s\n", file_path);
+			}
 			
 			free(file_path);
 			
@@ -105,8 +108,8 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
 		// get entry stats
 		if(lstat(file_path, &stats) < 0)
 		{
-			error = 1;
-			error_read_stat++;
+			walk_error = 1;
+			walk_error_read_stat++;
 			
 			fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", file_path, __FILE__, __LINE__);
 			free(file_path);
@@ -151,7 +154,7 @@ int walk(char *path, void (*callback_process_files)(char *path), void (*callback
  */
 int walk_get_error(void)
 {
-	return error;
+	return walk_error;
 }
 
 /**
@@ -160,7 +163,7 @@ int walk_get_error(void)
  */
 long int walk_get_error_open_dir(void)
 {
-	return error_open_dir;
+	return walk_error_open_dir;
 }
 
 /**
@@ -169,6 +172,6 @@ long int walk_get_error_open_dir(void)
  */
 long int walk_get_error_read_stat(void)
 {
-	return error_read_stat;
+	return walk_error_read_stat;
 }
 

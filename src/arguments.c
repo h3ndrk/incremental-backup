@@ -40,22 +40,22 @@
 
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state);
 
-const char *argp_program_version = "backup 0.0.4-beta";
+const char *argp_program_version = "backup 0.0.5-beta";
 const char *argp_program_bug_address = "https://github.com/NIPE-SYSTEMS/incremental-backup/issues";
-static const char *doc = "Simple incremental backup implementation in C.";
+static const char *doc = "Incremental backup with tar-archives written in C.";
 static struct argp_option options[] =
 {
 	{ NULL, 0, NULL, 0, "I/O options", 1 },
 	{ "source", 's', "PATH", 0, "Path to the directory which should be stored in backup (REQUIRED)", 0 },
 	{ "archive", 'a', "FILE", 0, "Path to the generated archive, default: 'backup.tar'", 0 },
-	{ "index", 'i', "FILE", 0, "Path to the index file, default: 'backup.index'", 0 },
+	{ "index", 'i', "FILE", 0, "Path to the index directory. This path must exist. (REQUIRED)", 0 },
 	{ "compress", 'c', "ALGORITHM", 0, "Possible ALGORITHM values: 'b64encode', 'bzip2', 'compress', 'grzip', 'gzip', 'lrzip', 'lzip', 'lzop', 'uuencode', 'xz'", 0 },
 	{ NULL, 0, NULL, 0, "Recursivly directory walking options", 2 },
 	{ "exclude", 'e', "PATTERN", 0, "Exclude files and directories which match the shell wildcard pattern PATTERN", 0 },
 	{ "skip-hidden", 'S', NULL, 0, "Skip hidden files (leading '.' in file name)", 0 },
 	{ NULL, 0, NULL, 0, "General options", 3 },
 	{ "full", 'f', NULL, 0, "Ignore index file and make a full backup", 0 },
-	{ "yes", 'y', NULL, 0, "Answer all questions with yes (script-friendly)", 0 },
+	{ "no-output", 'n', NULL, 0, "Do not output status informations (script-friendly, parse-friendly)", 0 },
 	{ "verbose", 'v', NULL, 0, "Verbose output", 0 },
 	{ "stats", 't', NULL, 0, "Show stats at the end", 0 },
 	{ NULL, 0, NULL, 0, NULL, 0 }
@@ -110,9 +110,9 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 			arguments->show_stats = 1;
 			break;
 		}
-		case 'y':
+		case 'n':
 		{
-			arguments->yes = 1;
+			arguments->no_output = 1;
 			break;
 		}
 		case 'v':
