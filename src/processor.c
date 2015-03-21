@@ -34,37 +34,7 @@
 #include "processor.h"
 #include "path_helper.h"
 #include "archive.h"
-#include "index.h"
 #include "arguments.h"
-
-/**
- * Callback: Stores the given file into memory. Also retrieves timestamp of the file.
- * @param path the file which should be added
- */
-void process_file_index(char *path)
-{
-	struct stat stats;
-	
-	// get file stats
-	if(lstat(path, &stats) < 0)
-	{
-		fprintf(stderr, "Failed to get stat: %s, (%s, line %i)\n", path, __FILE__, __LINE__);
-		
-		return;
-	}
-	
-	index_files_add(stats.st_mtim.tv_sec, path, 0);
-}
-
-/**
- * Callback: Stores the given file into memory
- * @param timestamp the timestamp of the file
- * @param path the file which should be added
- */
-void process_file_index_saved(long int timestamp, char *path)
-{
-	index_saved_add(timestamp, path, 0);
-}
 
 /**
  * Callback: Checks if the file exists in index. If not it will be created. If the

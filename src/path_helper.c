@@ -34,7 +34,6 @@
 #include "processor.h"
 #include "path_helper.h"
 #include "archive.h"
-#include "index.h"
 #include "arguments.h"
 
 static char **path_exclude_patterns = NULL;

@@ -35,7 +35,6 @@
 #include "processor.h"
 #include "path_helper.h"
 #include "archive.h"
-#include "index.h"
 #include "arguments.h"
 
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state);
