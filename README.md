@@ -1,6 +1,6 @@
 # Incremental Backup in C
 
-This program is a implementation of an efficient incremental backup solution. It stores file informations in a human-readable directory (here called 'index'). The backups can be stored in tar-archives.
+This program is an implementation of an efficient incremental backup solution. It stores file informations in a human-readable directory (here called 'index'). The backups can be stored in tar-archives.
 
 For a full list of options try:
 
