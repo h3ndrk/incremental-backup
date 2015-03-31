@@ -21,7 +21,7 @@ CFLAGS += `pkg-config --cflags libarchive`
 
 LIBS += `pkg-config --libs libarchive`
 
-.PHONY: all backup tests init clean doc man
+.PHONY: all backup tests init clean doc man install uninstall
 
 all: backup
 
