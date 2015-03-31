@@ -30,7 +30,7 @@ For a full list of options read the man-page `incremental-backup.1` of the repos
 
 ## Usage
 
-    Usage: backup [OPTION...]
+    Usage: incremental-backup [OPTION...]
     Incremental backup with tar-archives written in C.
     
      I/O options
@@ -75,7 +75,7 @@ This program tries to be very efficient. That's why the program is fast and uses
 1. Install all libraries for the program (POSIX, libarchive)
 2. Go into the directory of the program (where `Makefile` is stored): `cd path/to/the/program`
 3. Compile the program: `make`
-4. The program is located in `bin/backup`
+4. The program is located in `bin/incremental-backup`
 
 For a full list of options read the man-page `incremental-backup.1` of the repository.
 

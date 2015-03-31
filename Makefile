@@ -15,29 +15,46 @@
 
 CC = gcc
 
-CFLAGS = -Wall
+CFLAGS += -Wall
 CFLAGS += -Wextra
-#CFLAGS += -pedantic
 CFLAGS += `pkg-config --cflags libarchive`
 
-LIBS  = `pkg-config --libs libarchive`
+LIBS += `pkg-config --libs libarchive`
 
-.PHONY: all backup tests init clean
+.PHONY: all backup tests init clean doc man
 
 all: backup
 
-backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/archive.o bin/obj/arguments.o
-	$(CC) bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/archive.o bin/obj/arguments.o $(CFLAGS) -o bin/backup $(LIBS)
+# Compile main program
 
-tests: init
+backup: init bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/archive.o bin/obj/arguments.o
+	$(CC) bin/obj/walk.o bin/obj/processor.o bin/obj/path_helper.o bin/obj/backup.o bin/obj/archive.o bin/obj/arguments.o $(CFLAGS) -o bin/incremental-backup $(LIBS)
+
+# Compile tests
+
+tests: init test_array test_if test_libarchive test_time
+
+# Test targets
+
+test_array: src/test/test_array.c
 	$(CC) src/test/test_array.c -Wall -Wextra -o bin/test_array
+
+test_if: src/test/test_if.c
 	$(CC) src/test/test_if.c -Wall -Wextra -o bin/test_if
-	$(CC) src/test/test_libarchive.c -Wall -Wextra `pkg-config --cflags libarchive` -o bin/test_libarchive `pkg-config --libs libarchive`
+
+test_libarchive: src/test/test_libarchive.c
+	$(CC) src/test/test_libarchive.c -Wall -Wextra -o bin/test_libarchive
+
+test_time: src/test/test_time.c
 	$(CC) src/test/test_time.c -Wall -Wextra -o bin/test_time
+
+# Initializes directories
 
 init:
 	mkdir -p bin
 	mkdir -p bin/obj
+
+# C-objects
 
 bin/obj/backup.o: src/backup.c
 	$(CC) $(CFLAGS) -c -o bin/obj/backup.o src/backup.c $(LIBS)
@@ -57,8 +74,29 @@ bin/obj/archive.o: src/archive.c
 bin/obj/arguments.o: src/arguments.c
 	$(CC) $(CFLAGS) -c -o bin/obj/arguments.o src/arguments.c $(LIBS)
 
+# Clean
+
 clean:
 	rm -Rf bin
 
+# Generate documentation with Doxygen
+
 doc:
 	doxygen Doxyfile
+
+# Compress man-page
+
+man:
+	gzip --to-stdout incremental-backup.1 > incremental-backup.1.gz
+
+# Install main program and additional files
+install: backup man
+	install -m 755 bin/incremental-backup /usr/bin/incremental-backup
+	install -m 644 incremental-backup.1.gz /usr/local/share/man/man1/incremental-backup.1.gz
+	mandb
+
+# Uninstall main program and additional files
+uninstall:
+	rm -Rf /usr/bin/incremental-backup
+	rm -Rf /usr/local/share/man/man1/incremental-backup.1.gz
+	mandb
