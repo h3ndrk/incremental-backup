@@ -2,9 +2,7 @@
 
 This program is an implementation of an efficient incremental backup solution. It stores file informations in a human-readable directory (here called 'index'). The backups can be stored in tar-archives.
 
-For a full list of options try:
-
-    backup --help
+For a full list of options read the man-page `incremental-backup.1`.
 
 ## Features
 
@@ -28,6 +26,7 @@ For a full list of options try:
 * exclude patterns per command line option
 * skip hidden files per command line option
 * [Doxygen](http://www.stack.nl/~dimitri/doxygen/index.html) support
+* man-page support
 
 ## Usage
 
@@ -78,9 +77,7 @@ This program tries to be very efficient. That's why the program is fast and uses
 3. Compile the program: `make`
 4. The program is located in `bin/backup`
 
-For a full list of options try:
-
-    bin/backup --help
+For a full list of options read the man-page `incremental-backup.1`.
 
 ## Used libraries
 

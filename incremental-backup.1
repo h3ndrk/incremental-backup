@@ -1,0 +1,122 @@
+.TH incremental-backup 1
+.SH NAME
+incremental-backup \- Incremental backup with tar-archives written in C
+.SH SYNOPSIS
+.B incremental-backup
+[\fB\-\-archive\fR=\fIFILE\fR]
+[\fB\-a\fR \fIFILE\fR]
+[\fB\-\-compress\fR=\fIALGORITHM\fR]
+[\fB\-c\fR \fIALGORITHM\fR]
+[\fB\-\-index\fR=\fIFILE\fR]
+[\fB\-i\fR \fIFILE\fR]
+[\fB\-\-source\fR=\fIPATH\fR]
+[\fB\-s\fR \fIPATH\fR]
+[\fB\-\-exclude\fR=\fIPATTERN\fR]
+[\fB\-e\fR \fIPATTERN\fR]
+[\fB\-\-skip-hidden\fR]
+[\fB\-S\fR]
+[\fB\-\-full\fR]
+[\fB\-f\fR]
+[\fB\-\-no-output\fR]
+[\fB\-n\fR]
+[\fB\-\-stats\fR]
+[\fB\-t\fR]
+[\fB\-\-verbose\fR]
+[\fB\-v\fR]
+[\fB\-\-help\fR]
+[\fB\-?\fR]
+[\fB\-\-usage\fR]
+[\fB\-\-version\fR]
+[\fB\-V\fR]
+.SH DESCRIPTION
+This program is an implementation of an efficient incremental backup solution.
+It stores file informations in a human-readable directory (here called 'index').
+The backups can be stored in tar-archives.
+.SH FEATURES
+.IP - 2
+full backup per command line option
+.IP - 2
+user questions which are skippable per command line option
+.IP - 2
+several compression algorithms supported:
+.RS 4
+.IP - 2
+b64encode
+.IP - 2
+.BR bzip2
+.IP - 2
+.BR compress
+.IP - 2
+grzip
+.IP - 2
+.BR gzip
+.IP - 2
+lrzip
+.IP - 2
+lzip
+.IP - 2
+lzop
+.IP - 2
+uuencode
+.IP - 2
+.BR xz
+.RE
+.IP - 2
+automatic use of absolute paths
+.IP - 2
+Stable with tested features
+.IP - 2
+incremental backup
+.IP - 2
+backup archive as (compressed) tar file
+.IP - 2
+exclude patterns per command line option
+.IP - 2
+skip hidden files per command line option
+support
+.SH OPTIONS
+.TP
+.BR \-a ", " \-\-archive =\fIFILE\fR
+Path to the generated archive, default: 'backup.tar'
+.TP
+.BR \-c ", " \-\-compress =\fIALGORITHM\fR
+Possible ALGORITHM values: 'b64encode', 'bzip2', 'compress', 'grzip', 'gzip', 'lrzip', 'lzip', 'lzop', 'uuencode', 'xz'
+.TP
+.BR \-i ", " \-\-index =\fIFILE\fR
+Path to the index directory. This path must exist.
+.BR (REQUIRED)
+.TP
+.BR \-s ", " \-\-source =\fIPATH\fR
+Path to the directory which should be stored in backup
+.BR (REQUIRED)
+.TP
+.BR \-e ", " \-\-exclude =\fIPATTERN\fR
+Exclude files and directories which match the shell wildcard pattern PATTERN
+.TP
+.BR \-S ", " \-\-skip\-hidden
+Skip hidden files (leading '.' in file name)
+.TP
+.BR \-f ", " \-\-full
+Ignore index and make a full backup
+.TP
+.BR \-n ", " \-\-no\-output
+Do not output status informations (script-friendly, parse-friendly)
+.TP
+.BR \-t ", " \-\-stats
+Show stats at the end
+.TP
+.BR \-v ", " \-\-verbose
+Verbose output
+.TP
+.BR \-? ", " \-\-help
+Give help list
+.TP
+.BR \-\-usage
+Give a short usage message
+.TP
+.BR \-V ", " \-\-version
+Print program version
+.SH BUGS
+Report bugs to https://github.com/NIPE-SYSTEMS/incremental-backup/issues
+.SH LICENSE
+lastest GPL-license (see LICENSE-file at https://github.com/NIPE-SYSTEMS/incremental-backup)
