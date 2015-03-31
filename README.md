@@ -2,7 +2,7 @@
 
 This program is an implementation of an efficient incremental backup solution. It stores file informations in a human-readable directory (here called 'index'). The backups can be stored in tar-archives.
 
-For a full list of options read the man-page `incremental-backup.1`.
+For a full list of options read the man-page `incremental-backup.1` of the repository.
 
 ## Features
 
@@ -50,7 +50,7 @@ For a full list of options read the man-page `incremental-backup.1`.
       -S, --skip-hidden          Skip hidden files (leading '.' in file name)
     
      General options
-      -f, --full                 Ignore index file and make a full backup
+      -f, --full                 Ignore index and make a full backup
       -n, --no-output            Do not output status informations
                                  (script-friendly, parse-friendly)
       -t, --stats                Show stats at the end
@@ -77,7 +77,7 @@ This program tries to be very efficient. That's why the program is fast and uses
 3. Compile the program: `make`
 4. The program is located in `bin/backup`
 
-For a full list of options read the man-page `incremental-backup.1`.
+For a full list of options read the man-page `incremental-backup.1` of the repository.
 
 ## Used libraries
 

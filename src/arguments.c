@@ -53,7 +53,7 @@ static struct argp_option options[] =
 	{ "exclude", 'e', "PATTERN", 0, "Exclude files and directories which match the shell wildcard pattern PATTERN", 0 },
 	{ "skip-hidden", 'S', NULL, 0, "Skip hidden files (leading '.' in file name)", 0 },
 	{ NULL, 0, NULL, 0, "General options", 3 },
-	{ "full", 'f', NULL, 0, "Ignore index file and make a full backup", 0 },
+	{ "full", 'f', NULL, 0, "Ignore index and make a full backup", 0 },
 	{ "no-output", 'n', NULL, 0, "Do not output status informations (script-friendly, parse-friendly)", 0 },
 	{ "verbose", 'v', NULL, 0, "Verbose output", 0 },
 	{ "stats", 't', NULL, 0, "Show stats at the end", 0 },
