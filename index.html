@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>incremental-backup by NIPE-SYSTEMS</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>incremental-backup</h1>
+        <p>Incremental backup with tar-archives written in C</p>
+
+        <p class="view"><a href="https://github.com/NIPE-SYSTEMS/incremental-backup">View the Project on GitHub <small>NIPE-SYSTEMS/incremental-backup</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/NIPE-SYSTEMS/incremental-backup/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/NIPE-SYSTEMS/incremental-backup/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/NIPE-SYSTEMS/incremental-backup">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="incremental-backup-in-c" class="anchor" href="#incremental-backup-in-c" aria-hidden="true"><span class="octicon octicon-link"></span></a>Incremental Backup in C</h1>
+
+<p>This program is an implementation of an efficient incremental backup solution. It stores file informations in a human-readable directory (here called 'index'). The backups can be stored in tar-archives.</p>
+
+<p>For a full list of options read the man-page <code>incremental-backup.1</code> of the repository.</p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>full backup per command line option</li>
+<li>user questions which are skippable per command line option</li>
+<li>several compression algorithms supported:
+
+<ul>
+<li>b64encode</li>
+<li><strong>bzip2</strong></li>
+<li><strong>compress</strong></li>
+<li>grzip</li>
+<li><strong>gzip</strong></li>
+<li>lrzip</li>
+<li>lzip</li>
+<li>lzop</li>
+<li>uuencode</li>
+<li><strong>xz</strong></li>
+</ul>
+</li>
+<li>automatic use of absolute paths</li>
+<li>Stable with tested features</li>
+<li>incremental backup</li>
+<li>backup archive as (compressed) tar file</li>
+<li>exclude patterns per command line option</li>
+<li>skip hidden files per command line option</li>
+<li>
+<a href="http://www.stack.nl/%7Edimitri/doxygen/index.html">Doxygen</a> support</li>
+<li>man-page support</li>
+</ul>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<pre><code>Usage: incremental-backup [OPTION...]
+Incremental backup with tar-archives written in C.
+
+ I/O options
+  -a, --archive=FILE         Path to the generated archive, default:
+                             'backup.tar'
+  -c, --compress=ALGORITHM   Possible ALGORITHM values: 'b64encode', 'bzip2',
+                             'compress', 'grzip', 'gzip', 'lrzip', 'lzip',
+                             'lzop', 'uuencode', 'xz'
+  -i, --index=FILE           Path to the index directory. This path must exist.
+                             (REQUIRED)
+  -s, --source=PATH          Path to the directory which should be stored in
+                             backup (REQUIRED)
+
+ Recursivly directory walking options
+  -e, --exclude=PATTERN      Exclude files and directories which match the
+                             shell wildcard pattern PATTERN
+  -S, --skip-hidden          Skip hidden files (leading '.' in file name)
+
+ General options
+  -f, --full                 Ignore index and make a full backup
+  -n, --no-output            Do not output status informations
+                             (script-friendly, parse-friendly)
+  -t, --stats                Show stats at the end
+  -v, --verbose              Verbose output
+
+  -?, --help                 Give this help list
+      --usage                Give a short usage message
+  -V, --version              Print program version
+</code></pre>
+
+<h3>
+<a id="exclude-pattern" class="anchor" href="#exclude-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exclude pattern</h3>
+
+<p>The exclude algorithm works with <code>fnmatch</code> (man page: <a href="http://linux.die.net/man/3/fnmatch">http://linux.die.net/man/3/fnmatch</a>). For example:</p>
+
+<p>To exclude all files in <code>/home</code> pass <strong><code>--exclude /home/*</code></strong> because you want to skip all files and directories in <code>/home</code>.</p>
+
+<h2>
+<a id="why-another-backup-program" class="anchor" href="#why-another-backup-program" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why another backup program?</h2>
+
+<p>This program tries to be very efficient. That's why the program is fast and uses a tiny amount of memory. In addition it supports incremental backups as a core feature. On the other hand the efficiency does not mean that it has less features. The user is able to use a bunch of features like several mainly used compression algorithms. These characteristics make this backup program an individual program with features that other programs do not have.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<ol>
+<li>Install all libraries for the program (POSIX, libarchive)</li>
+<li>Go into the directory of the program (where <code>Makefile</code> is stored): <code>cd path/to/the/program</code>
+</li>
+<li>Compile the program: <code>make</code>
+</li>
+<li>The program is located in <code>bin/incremental-backup</code>
+</li>
+</ol>
+
+<p>For a full list of options read the man-page <code>incremental-backup.1</code> of the repository.</p>
+
+<h2>
+<a id="used-libraries" class="anchor" href="#used-libraries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Used libraries</h2>
+
+<ul>
+<li>POSIX for recursive directory walking</li>
+<li>libarchive for storing the files in an archive</li>
+</ul>
+
+<h2>
+<a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h2>
+
+<h3>
+<a id="machine" class="anchor" href="#machine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Machine</h3>
+
+<ul>
+<li>Intel Core i5 M480 @ 2.76 GHz x 4</li>
+<li>3.7 GiB RAM</li>
+<li>Arch Linux 64-Bit</li>
+</ul>
+
+<h3>
+<a id="memory-usage-test" class="anchor" href="#memory-usage-test" aria-hidden="true"><span class="octicon octicon-link"></span></a>Memory usage test</h3>
+
+<p>Memory usage with 866364 files in filesystem: ca. 8 MB</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>lastest GPL-license (see LICENSE-file)</p>
+
+<p>Copyright (C) 2015 NIPE-SYSTEMS, <a href="http://www.nipe-systems.de">http://www.nipe-systems.de</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/NIPE-SYSTEMS">NIPE-SYSTEMS</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
