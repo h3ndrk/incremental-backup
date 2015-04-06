@@ -39,7 +39,7 @@
 
 static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state);
 
-const char *argp_program_version = "backup 0.0.6-beta";
+const char *argp_program_version = "incremental-backup 0.0.6-beta";
 const char *argp_program_bug_address = "https://github.com/NIPE-SYSTEMS/incremental-backup/issues";
 static const char *doc = "Incremental backup with tar-archives written in C.";
 static struct argp_option options[] =
@@ -73,54 +73,74 @@ static error_t arguments_parse_opt(int key, char *arg, struct argp_state *state)
 	{
 		case 'e':
 		{
+			// printf("exclude add: %s\n", arg);
+			
 			path_exclude_pattern_add(arg);
 			break;
 		}
 		case 'S':
 		{
+			// printf("skip hidden files\n");
+			
 			path_skip_hidden_files(1);
 			break;
 		}
 		case 's':
 		{
+			// printf("source: %s\n", arg);
+			
 			free(arguments->source);
 			arguments->source = strdup(arg);
 			break;
 		}
 		case 'a':
 		{
+			// printf("archive: %s\n", arg);
+			
 			free(arguments->archive);
 			arguments->archive = strdup(arg);
 			break;
 		}
 		case 'i':
 		{
+			// printf("index: %s\n", arg);
+			
 			free(arguments->index);
 			arguments->index = strdup(arg);
 			break;
 		}
 		case 'f':
 		{
+			// printf("full\n");
+			
 			arguments->full = 1;
 			break;
 		}
 		case 't':
 		{
+			// printf("stats\n");
+			
 			arguments->show_stats = 1;
 			break;
 		}
 		case 'n':
 		{
+			// printf("script-friendly\n");
+			
 			arguments->no_output = 1;
 			break;
 		}
 		case 'v':
 		{
+			// printf("verbose\n");
+			
 			arguments->verbose = 1;
 			break;
 		}
 		case 'c':
 		{
+			// printf("algorithm: %s\n", arg);
+			
 			if(!strcmp(arg, "b64encode"))
 			{
 				arguments->compression_algorithm = ARGUMENTS_ALG_B64ENCODE;

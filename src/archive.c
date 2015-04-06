@@ -135,7 +135,7 @@ int archive_add_file(char *path)
 	
 	if(return_code != ARCHIVE_OK)
 	{
-		fprintf(stderr, "Failed to create read disk: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
+		fprintf(stderr, "Failed to create read disk: (%s) (%s, line %i), %s\n", path, __FILE__, __LINE__, archive_error_string(file));
 		
 		return -1;
 	}
@@ -152,7 +152,7 @@ int archive_add_file(char *path)
 		}
 		if(return_code != ARCHIVE_OK)
 		{
-			fprintf(stderr, "Failed to read file header: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
+			fprintf(stderr, "Failed to read file header: (%s) (%s, line %i), %s\n", path, __FILE__, __LINE__, archive_error_string(file));
 			
 			archive_entry_free(entry);
 			break;
@@ -163,14 +163,14 @@ int archive_add_file(char *path)
 		
 		if(return_code < ARCHIVE_OK)
 		{
-			fprintf(stderr, "Failed to write archive header: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
+			fprintf(stderr, "Failed to write archive header: (%s) (%s, line %i), %s\n", path, __FILE__, __LINE__, archive_error_string(file));
 			
 			archive_entry_free(entry);
 			break;
 		}
 		if(return_code == ARCHIVE_FATAL)
 		{
-			fprintf(stderr, "Fatal error: (%s, line %i), %s\n", __FILE__, __LINE__, archive_error_string(file));
+			fprintf(stderr, "Fatal error: (%s) (%s, line %i), %s\n", path, __FILE__, __LINE__, archive_error_string(file));
 			
 			archive_entry_free(entry);
 			break;
@@ -181,7 +181,7 @@ int archive_add_file(char *path)
 			input_file_descriptor = open(path, O_RDONLY);
 			if(input_file_descriptor < 0)
 			{
-				fprintf(stderr, "Failed to open write stream: (%s, line %i)\n", __FILE__, __LINE__);
+				fprintf(stderr, "Failed to open write stream: (%s) (%s, line %i)\n", path, __FILE__, __LINE__);
 				
 				archive_entry_free(entry);
 				break;
